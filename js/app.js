@@ -1,521 +1,313 @@
-/* ============================================
-   Interview Resources — app.js
-   ============================================ */
+// ─── State ──────────────────────────────────────────────────────────────────
+const state = {
+  data: null,
+  activeCategory: "all",
+  activeFilter: "all",
+  searchQuery: "",
+  view: "grid",
+};
 
-const STORAGE_KEY = 'ir_progress_v1';
-
-// ─── State ──────────────────────────────────
-let allData = [];
-let activeFilter = 'all';
-let searchQuery = '';
-let viewMode = 'all'; // 'all' | 'bookmarks'
-let activeModal = null; // { resourceId, tab }
-
-// ─── Load / Save Progress ────────────────────
-function loadProgress() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : { bookmarks: {}, read: {}, lastRead: null, discussions: {} };
-  } catch { return { bookmarks: {}, read: {}, lastRead: null, discussions: {} }; }
-}
-
-function saveProgress(p) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
-}
-
-let progress = loadProgress();
-
-// ─── Fetch Data ──────────────────────────────
+// ─── Fetch Data ──────────────────────────────────────────────────────────────
 async function fetchData() {
   try {
-    const res = await fetch('data/resources.json');
-    const json = await res.json();
-    allData = json.categories;
-  } catch (e) {
-    console.error('Failed to load resources.json', e);
-    allData = [];
+    const res = await fetch("data/resources.json");
+    if (!res.ok) throw new Error("Failed to fetch");
+    state.data = await res.json();
+    init();
+  } catch (err) {
+    document.getElementById("app").innerHTML = `
+      <div class="flex flex-col items-center justify-center h-64 gap-4">
+        <span class="text-5xl">⚠️</span>
+        <p class="text-red-400 font-mono">Failed to load resources.json</p>
+        <p class="text-zinc-500 text-sm">Make sure you're running via a local server (e.g. Live Server)</p>
+      </div>`;
   }
 }
 
-// ─── Helpers ────────────────────────────────
-function isNew(resource) {
-  if (!resource.isNew) return false;
-  const added = new Date(resource.addedDate);
-  const days = (Date.now() - added) / 86400000;
-  return days <= 30;
+// ─── Init ────────────────────────────────────────────────────────────────────
+function init() {
+  renderSidebar();
+  renderStats();
+  renderContent();
+  bindSearch();
 }
 
-function getResourceById(id) {
-  for (const cat of allData) {
-    const r = cat.resources.find(r => r.id === id);
-    if (r) return { resource: r, category: cat };
+// ─── Sidebar ─────────────────────────────────────────────────────────────────
+function renderSidebar() {
+  const nav = document.getElementById("category-nav");
+  const { categories } = state.data;
+
+  const totalCount = categories.reduce((a, c) => a + c.resources.length, 0);
+
+  const allBtn = createNavItem(
+    "all",
+    "📚",
+    "All Resources",
+    totalCount,
+    "#a78bfa",
+    state.activeCategory === "all"
+  );
+  nav.innerHTML = "";
+  nav.appendChild(allBtn);
+
+  categories.forEach((cat) => {
+    const btn = createNavItem(
+      cat.id,
+      cat.icon,
+      cat.label,
+      cat.resources.length,
+      cat.color,
+      state.activeCategory === cat.id
+    );
+    nav.appendChild(btn);
+  });
+}
+
+function createNavItem(id, icon, label, count, color, active) {
+  const btn = document.createElement("button");
+  btn.className = `nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group ${
+    active ? "active" : "hover:bg-zinc-800/60"
+  }`;
+  btn.dataset.category = id;
+  btn.innerHTML = `
+    <span class="text-xl w-8 flex items-center justify-center">${icon}</span>
+    <span class="flex-1 font-medium text-sm ${active ? "text-white" : "text-zinc-400 group-hover:text-zinc-200"}">${label}</span>
+    <span class="text-xs px-2 py-0.5 rounded-full font-mono font-bold" style="background:${color}22; color:${color}">${count}</span>
+  `;
+  if (active) btn.style.background = `${color}18`;
+  btn.addEventListener("click", () => {
+    state.activeCategory = id;
+    state.activeFilter = "all";
+    renderSidebar();
+    renderContent();
+    renderFilterBar();
+  });
+  return btn;
+}
+
+// ─── Stats ───────────────────────────────────────────────────────────────────
+function renderStats() {
+  const { categories, meta } = state.data;
+  const total = meta.totalResources;
+  const htmlCount = categories.flatMap((c) => c.resources).filter((r) => r.type === "html").length;
+  const mdCount = categories.flatMap((c) => c.resources).filter((r) => r.type === "md").length;
+  const advCount = categories
+    .flatMap((c) => c.resources)
+    .filter((r) => r.difficulty === "Advanced").length;
+
+  document.getElementById("stat-total").textContent = total;
+  document.getElementById("stat-html").textContent = htmlCount;
+  document.getElementById("stat-md").textContent = mdCount;
+  document.getElementById("stat-adv").textContent = advCount;
+}
+
+// ─── Filter Bar ───────────────────────────────────────────────────────────────
+function renderFilterBar() {
+  const bar = document.getElementById("filter-bar");
+  const filters = ["all", "Beginner", "Intermediate", "Advanced"];
+  bar.innerHTML = filters
+    .map(
+      (f) => `
+    <button onclick="setFilter('${f}')" 
+      class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+        state.activeFilter === f
+          ? "bg-violet-500 text-white"
+          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200"
+      }">
+      ${f === "all" ? "All Levels" : f}
+    </button>`
+    )
+    .join("");
+}
+
+function setFilter(f) {
+  state.activeFilter = f;
+  renderFilterBar();
+  renderContent();
+}
+
+// ─── Search ──────────────────────────────────────────────────────────────────
+function bindSearch() {
+  const input = document.getElementById("search-input");
+  input.addEventListener("input", (e) => {
+    state.searchQuery = e.target.value.toLowerCase().trim();
+    renderContent();
+  });
+}
+
+// ─── Get Filtered Resources ───────────────────────────────────────────────────
+function getFilteredResources() {
+  const { categories } = state.data;
+  let resources = [];
+
+  if (state.activeCategory === "all") {
+    resources = categories.flatMap((cat) =>
+      cat.resources.map((r) => ({ ...r, catId: cat.id, catLabel: cat.label, catColor: cat.color, catIcon: cat.icon }))
+    );
+  } else {
+    const cat = categories.find((c) => c.id === state.activeCategory);
+    if (cat) {
+      resources = cat.resources.map((r) => ({
+        ...r,
+        catId: cat.id,
+        catLabel: cat.label,
+        catColor: cat.color,
+        catIcon: cat.icon,
+      }));
+    }
   }
-  return null;
+
+  if (state.activeFilter !== "all") {
+    resources = resources.filter((r) => r.difficulty === state.activeFilter);
+  }
+
+  if (state.searchQuery) {
+    resources = resources.filter(
+      (r) =>
+        r.title.toLowerCase().includes(state.searchQuery) ||
+        r.description.toLowerCase().includes(state.searchQuery) ||
+        r.tags.some((t) => t.toLowerCase().includes(state.searchQuery))
+    );
+  }
+
+  return resources;
 }
 
-function getMergedDiscussions(resourceId, repoDiscussions) {
-  const local = progress.discussions[resourceId] || [];
-  return [...(repoDiscussions || []), ...local];
-}
+// ─── Render Content ───────────────────────────────────────────────────────────
+function renderContent() {
+  renderFilterBar();
+  const resources = getFilteredResources();
+  const grid = document.getElementById("resource-grid");
+  const emptyState = document.getElementById("empty-state");
+  const countEl = document.getElementById("result-count");
 
-// ─── Render ──────────────────────────────────
-function render() {
-  const query = searchQuery.toLowerCase();
-  const container = document.getElementById('sections-container');
-  container.innerHTML = '';
-  let totalVisible = 0;
+  countEl.textContent = `${resources.length} resource${resources.length !== 1 ? "s" : ""}`;
 
-  // Last Read banner
-  renderLastRead();
-
-  // Render bookmarks view
-  if (viewMode === 'bookmarks') {
-    renderBookmarks(container);
+  if (resources.length === 0) {
+    grid.classList.add("hidden");
+    emptyState.classList.remove("hidden");
     return;
   }
 
-  // Progress bar
-  renderProgressBar();
+  grid.classList.remove("hidden");
+  emptyState.classList.add("hidden");
+  grid.innerHTML = resources.map((r) => renderCard(r)).join("");
 
-  allData.forEach(cat => {
-    if (activeFilter !== 'all' && activeFilter !== cat.id) return;
-
-    const filtered = cat.resources.filter(r => {
-      if (!query) return true;
-      return r.name.toLowerCase().includes(query) || r.desc.toLowerCase().includes(query);
+  // Animate cards in
+  requestAnimationFrame(() => {
+    document.querySelectorAll(".resource-card").forEach((card, i) => {
+      card.style.animationDelay = `${i * 40}ms`;
+      card.classList.add("card-enter");
     });
-
-    if (filtered.length === 0) return;
-    totalVisible += filtered.length;
-
-    const section = document.createElement('div');
-    section.className = 'section';
-    section.setAttribute('data-category', cat.id);
-    section.innerHTML = `
-      <div class="section-header">
-        <div class="section-icon" style="background:${cat.iconBg}">${cat.icon}</div>
-        <span class="section-title">${cat.label}</span>
-        <span class="section-count">${filtered.length} resource${filtered.length !== 1 ? 's' : ''}</span>
-      </div>
-      <div class="resource-grid">
-        ${filtered.map(r => renderCard(r, cat)).join('')}
-      </div>
-    `;
-    container.appendChild(section);
   });
-
-  if (totalVisible === 0 && viewMode === 'all') {
-    container.innerHTML = `<div class="empty-state">No resources found for "<strong>${escHtml(searchQuery)}</strong>"</div>`;
-  }
-
-  document.getElementById('total-stat').innerHTML = `<strong>${totalVisible}</strong> resources`;
-  attachCardListeners();
 }
 
-function renderCard(r, cat) {
-  const bookmarked = !!progress.bookmarks[r.id];
-  const read = !!progress.read[r.id];
-  const allDiscussions = getMergedDiscussions(r.id, r.discussions);
-  const dCount = allDiscussions.length;
-  const qCount = (r.interviewQuestions || []).length;
+// ─── Difficulty Badge ─────────────────────────────────────────────────────────
+const difficultyConfig = {
+  Beginner: { bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
+  Intermediate: { bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
+  Advanced: { bg: "bg-red-500/15", text: "text-red-400", dot: "bg-red-400" },
+};
+
+// ─── Render Card ──────────────────────────────────────────────────────────────
+function renderCard(r) {
+  const diff = difficultyConfig[r.difficulty] || difficultyConfig["Beginner"];
+  const typeIcon = r.type === "html" ? "🌐" : "📝";
+  const typeBadge = r.type === "html" ? "HTML" : "Markdown";
+  const tags = r.tags
+    .slice(0, 3)
+    .map(
+      (t) =>
+        `<span class="tag px-2 py-0.5 rounded-md text-xs font-mono" style="background:${r.catColor}15; color:${r.catColor}cc">#${t}</span>`
+    )
+    .join("");
 
   return `
-    <div class="resource-card ${bookmarked ? 'bookmarked' : ''} ${read ? 'read' : ''}"
-         data-id="${r.id}" data-href="${escHtml(r.href)}">
-      <div class="resource-card-top">
-        <span class="resource-name">${escHtml(r.name)}</span>
-        <svg class="resource-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M5 15L15 5M15 5H8M15 5v7" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+    <div class="resource-card group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex flex-col gap-4 
+                hover:border-zinc-600 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 cursor-pointer"
+         style="--cat-color: ${r.catColor}"
+         onclick="openResource('${r.path}', '${r.type}', '${r.title}')">
+      
+      <!-- Top glow accent -->
+      <div class="absolute inset-x-0 top-0 h-px rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+           style="background: linear-gradient(90deg, transparent, ${r.catColor}80, transparent)"></div>
+
+      <!-- Header -->
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">${r.catIcon}</span>
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-400">${r.catLabel}</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="${diff.bg} ${diff.text} text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full ${diff.dot}"></span>
+            ${r.difficulty}
+          </span>
+        </div>
       </div>
-      <p class="resource-desc">${escHtml(r.desc)}</p>
-      <div class="resource-footer">
-        <span class="tag" style="background:${cat.tagBg};color:${cat.tagColor}">${cat.label}</span>
-        ${r.isHot ? '<span class="badge-hot">🔥 Hot</span>' : ''}
-        ${isNew(r) ? '<span class="badge-new">✨ New</span>' : ''}
-        <span class="resource-type">.${r.type}</span>
+
+      <!-- Title -->
+      <div>
+        <h3 class="font-bold text-white text-base leading-snug group-hover:text-violet-300 transition-colors duration-200">${r.title}</h3>
+        <p class="text-zinc-500 text-sm mt-1.5 leading-relaxed line-clamp-2">${r.description}</p>
       </div>
-      <div class="card-actions">
-        <button class="card-btn bookmark-btn ${bookmarked ? 'active' : ''}" data-id="${r.id}" title="Bookmark">
-          <svg viewBox="0 0 20 20" fill="${bookmarked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.7">
-            <path d="M5 3h10a1 1 0 011 1v13l-6-3-6 3V4a1 1 0 011-1z" stroke-linejoin="round"/>
-          </svg>
-          ${bookmarked ? 'Saved' : 'Save'}
-        </button>
-        <button class="card-btn discuss-btn" data-id="${r.id}" title="Discussions">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7">
-            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H6l-4 2V5z" stroke-linejoin="round"/>
-          </svg>
-          ${dCount > 0 ? dCount : ''} Discuss
-        </button>
-        <button class="card-btn iq-btn" data-id="${r.id}" title="Interview Questions">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7">
-            <circle cx="10" cy="10" r="8"/>
-            <path d="M10 7v1.5a2 2 0 000 4V14" stroke-linecap="round"/>
-            <circle cx="10" cy="15.5" r="0.5" fill="currentColor"/>
-          </svg>
-          ${qCount > 0 ? qCount : ''} Q&amp;A
-        </button>
-        <button class="card-btn read-btn ${read ? 'active' : ''}" data-id="${r.id}" title="Mark as read">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7">
-            <path d="M3 10l5 5L17 5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          ${read ? 'Read' : 'Mark read'}
+
+      <!-- Tags -->
+      <div class="flex flex-wrap gap-1.5">${tags}</div>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-between mt-auto pt-3 border-t border-zinc-800">
+        <div class="flex items-center gap-1.5 text-xs text-zinc-600">
+          <span>${typeIcon}</span>
+          <span class="font-mono">${typeBadge}</span>
+          <span class="mx-1 opacity-40">·</span>
+          <span>${formatDate(r.lastUpdated)}</span>
+        </div>
+        <button class="flex items-center gap-1 text-xs font-semibold text-zinc-500 group-hover:text-violet-400 transition-colors duration-200">
+          Open <span class="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
         </button>
       </div>
     </div>
   `;
 }
 
-function renderBookmarks(container) {
-  const bookmarkedIds = Object.keys(progress.bookmarks).filter(id => progress.bookmarks[id]);
-  if (bookmarkedIds.length === 0) {
-    container.innerHTML = `<div class="empty-state">No bookmarks yet. Click <strong>Save</strong> on any resource card to bookmark it.</div>`;
-    return;
-  }
-
-  const section = document.createElement('div');
-  section.className = 'section';
-  const cards = [];
-
-  for (const cat of allData) {
-    for (const r of cat.resources) {
-      if (bookmarkedIds.includes(r.id)) {
-        cards.push(renderCard(r, cat));
-      }
-    }
-  }
-
-  section.innerHTML = `
-    <div class="section-header">
-      <div class="section-icon" style="background:#fef9c3">🔖</div>
-      <span class="section-title">Bookmarks</span>
-      <span class="section-count">${cards.length} saved</span>
-    </div>
-    <div class="resource-grid">${cards.join('')}</div>
-  `;
-  container.appendChild(section);
-  attachCardListeners();
+// ─── Open Resource ─────────────────────────────────────────────────────────────
+function openResource(path, type, title) {
+  // Opens the resource in a new tab
+  window.open(path, "_blank");
 }
 
-function renderLastRead() {
-  const lr = progress.lastRead;
-  const wrap = document.getElementById('last-read-section');
-  if (!lr) { wrap.classList.remove('visible'); return; }
-
-  const found = getResourceById(lr.id);
-  if (!found) { wrap.classList.remove('visible'); return; }
-
-  const { resource } = found;
-  wrap.classList.add('visible');
-  wrap.innerHTML = `
-    <span class="lr-label">↩ Last Read</span>
-    <div>
-      <div class="lr-name">${escHtml(resource.name)}</div>
-      <div class="lr-desc">${escHtml(resource.desc)}</div>
-    </div>
-    <a href="${escHtml(resource.href)}" target="_blank" rel="noopener">Continue →</a>
-  `;
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-function renderProgressBar() {
-  let total = 0, readCount = 0;
-  allData.forEach(cat => {
-    total += cat.resources.length;
-    cat.resources.forEach(r => { if (progress.read[r.id]) readCount++; });
-  });
+// ─── View Toggle ──────────────────────────────────────────────────────────────
+function setView(v) {
+  state.view = v;
+  const grid = document.getElementById("resource-grid");
+  const btnGrid = document.getElementById("btn-grid");
+  const btnList = document.getElementById("btn-list");
 
-  const pct = total > 0 ? Math.round((readCount / total) * 100) : 0;
-  const wrap = document.getElementById('progress-bar-wrap');
-  if (wrap) {
-    wrap.querySelector('.progress-fill').style.width = pct + '%';
-    wrap.querySelector('.progress-label').innerHTML =
-      `<strong>${readCount}/${total}</strong> resources read &nbsp;·&nbsp; ${pct}%`;
-  }
-}
-
-// ─── Event Listeners ─────────────────────────
-function attachCardListeners() {
-  // Card click → open resource link (unless a button was clicked)
-  document.querySelectorAll('.resource-card').forEach(card => {
-    card.addEventListener('click', e => {
-      if (e.target.closest('.card-btn')) return;
-      const href = card.dataset.href;
-      const id = card.dataset.id;
-      // Track last read
-      progress.lastRead = { id };
-      saveProgress(progress);
-      window.open(href, '_blank', 'noopener');
-    });
-  });
-
-  // Bookmark toggle
-  document.querySelectorAll('.bookmark-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const id = btn.dataset.id;
-      progress.bookmarks[id] = !progress.bookmarks[id];
-      if (!progress.bookmarks[id]) delete progress.bookmarks[id];
-      saveProgress(progress);
-      render();
-      showToast(progress.bookmarks[id] ? 'Bookmarked!' : 'Bookmark removed');
-    });
-  });
-
-  // Mark read
-  document.querySelectorAll('.read-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const id = btn.dataset.id;
-      progress.read[id] = !progress.read[id];
-      if (!progress.read[id]) delete progress.read[id];
-      saveProgress(progress);
-      render();
-      showToast(progress.read[id] ? 'Marked as read ✓' : 'Unmarked');
-    });
-  });
-
-  // Open discuss modal
-  document.querySelectorAll('.discuss-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      openModal(btn.dataset.id, 'discussion');
-    });
-  });
-
-  // Open Q&A modal
-  document.querySelectorAll('.iq-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      openModal(btn.dataset.id, 'iq');
-    });
-  });
-}
-
-// ─── Modal ───────────────────────────────────
-function openModal(resourceId, tab) {
-  const found = getResourceById(resourceId);
-  if (!found) return;
-  const { resource, category } = found;
-
-  const overlay = document.getElementById('modal-overlay');
-  const modal = document.getElementById('modal');
-
-  const discussions = getMergedDiscussions(resourceId, resource.discussions);
-  const questions = resource.interviewQuestions || [];
-
-  modal.innerHTML = `
-    <div class="modal-header">
-      <div class="modal-header-info">
-        <h2>${escHtml(resource.name)}</h2>
-        <p>${escHtml(resource.desc)}</p>
-      </div>
-      <button class="modal-close" id="modal-close-btn">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 5l10 10M15 5L5 15" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
-    <div class="modal-tabs">
-      <button class="modal-tab ${tab === 'discussion' ? 'active' : ''}" data-tab="discussion">
-        💬 Discussion ${discussions.length > 0 ? `(${discussions.length})` : ''}
-      </button>
-      <button class="modal-tab ${tab === 'iq' ? 'active' : ''}" data-tab="iq">
-        ❓ Interview Q&A ${questions.length > 0 ? `(${questions.length})` : ''}
-      </button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-  `;
-
-  renderModalTab(resourceId, tab, resource);
-
-  overlay.classList.add('open');
-  activeModal = { resourceId, tab };
-
-  document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-
-  modal.querySelectorAll('.modal-tab').forEach(t => {
-    t.addEventListener('click', () => {
-      modal.querySelectorAll('.modal-tab').forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      renderModalTab(resourceId, t.dataset.tab, resource);
-    });
-  });
-}
-
-function renderModalTab(resourceId, tab, resource) {
-  const body = document.getElementById('modal-body');
-  if (!body) return;
-
-  if (tab === 'discussion') {
-    const discussions = getMergedDiscussions(resourceId, resource.discussions);
-    body.innerHTML = `
-      <div class="discussion-list">
-        ${discussions.length > 0
-          ? discussions.map(d => `
-            <div class="discussion-item">
-              <div class="discussion-meta">
-                <strong>${escHtml(d.author)}</strong>
-                <span>${d.date}</span>
-              </div>
-              <div class="discussion-text">${escHtml(d.text)}</div>
-            </div>
-          `).join('')
-          : `<div class="empty-modal">No discussions yet. Be the first to start one!<br><small style="margin-top:6px;display:block">Discussions from the repo are loaded from <code>data/resources.json</code>.<br>Your local comments are saved in your browser.</small></div>`
-        }
-      </div>
-      <div class="discussion-form">
-        <input type="text" id="disc-author" placeholder="Your name or alias" maxlength="40" />
-        <textarea id="disc-text" placeholder="Share your thoughts, tips, or questions…"></textarea>
-        <button class="btn-submit" id="disc-submit">Post Comment</button>
-      </div>
-    `;
-
-    document.getElementById('disc-submit').addEventListener('click', () => {
-      const author = document.getElementById('disc-author').value.trim();
-      const text = document.getElementById('disc-text').value.trim();
-      if (!author || !text) { showToast('Please fill in both fields'); return; }
-
-      const newComment = { id: 'u' + Date.now(), author, text, date: new Date().toISOString().split('T')[0] };
-      if (!progress.discussions[resourceId]) progress.discussions[resourceId] = [];
-      progress.discussions[resourceId].push(newComment);
-      saveProgress(progress);
-      renderModalTab(resourceId, 'discussion', resource);
-      showToast('Comment posted locally ✓');
-    });
-
+  if (v === "grid") {
+    grid.className = "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4";
+    btnGrid.classList.add("active-view");
+    btnList.classList.remove("active-view");
   } else {
-    const questions = resource.interviewQuestions || [];
-    const local = progress.discussions['iq_' + resourceId] || [];
-
-    body.innerHTML = `
-      <div class="iq-list">
-        ${questions.length > 0
-          ? questions.map(q => `<div class="iq-item">${escHtml(q)}</div>`).join('')
-          : `<div class="empty-modal">No interview questions yet.</div>`
-        }
-        ${local.map(q => `<div class="iq-item" style="border-left: 2px solid var(--accent-border)">${escHtml(q.text)}</div>`).join('')}
-      </div>
-      <div class="discussion-form">
-        <textarea id="iq-text" placeholder="Add an interview question you encountered…" rows="3"></textarea>
-        <button class="btn-submit" id="iq-submit">Add Question (local)</button>
-      </div>
-      <p style="font-size:11.5px;color:var(--text-muted);margin-top:8px">
-        💡 To add permanently, open a PR editing <code>data/resources.json</code> — see README.
-      </p>
-    `;
-
-    document.getElementById('iq-submit').addEventListener('click', () => {
-      const text = document.getElementById('iq-text').value.trim();
-      if (!text) return;
-      const key = 'iq_' + resourceId;
-      if (!progress.discussions[key]) progress.discussions[key] = [];
-      progress.discussions[key].push({ id: 'u' + Date.now(), text, date: new Date().toISOString().split('T')[0] });
-      saveProgress(progress);
-      renderModalTab(resourceId, 'iq', resource);
-      showToast('Question saved locally ✓');
-    });
+    grid.className = "grid grid-cols-1 gap-3";
+    btnGrid.classList.remove("active-view");
+    btnList.classList.add("active-view");
   }
 }
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  activeModal = null;
+// ─── Sidebar Toggle (mobile) ──────────────────────────────────────────────────
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  sidebar.classList.toggle("-translate-x-full");
+  overlay.classList.toggle("hidden");
 }
 
-// ─── Toast ───────────────────────────────────
-let toastTimer;
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
-}
-
-// ─── Download / Import Progress ──────────────
-function downloadProgress() {
-  const blob = new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'interview-resources-progress.json';
-  a.click();
-}
-
-function importProgress(file) {
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      progress = { ...loadProgress(), ...imported };
-      saveProgress(progress);
-      render();
-      showToast('Progress imported ✓');
-    } catch { showToast('Invalid file'); }
-  };
-  reader.readAsText(file);
-}
-
-// ─── Escape HTML ─────────────────────────────
-function escHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-// ─── Init ────────────────────────────────────
-async function init() {
-  await fetchData();
-
-  // Build filter chips from data
-  const filterBar = document.getElementById('filter-bar');
-  filterBar.innerHTML = `<button class="filter-chip active" data-filter="all">All</button>` +
-    allData.map(c => `<button class="filter-chip" data-filter="${c.id}">${c.label}</button>`).join('');
-
-  filterBar.addEventListener('click', e => {
-    const chip = e.target.closest('.filter-chip');
-    if (!chip) return;
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    activeFilter = chip.dataset.filter;
-    render();
-  });
-
-  document.getElementById('search-input').addEventListener('input', e => {
-    searchQuery = e.target.value;
-    if (searchQuery) {
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      document.querySelector('[data-filter="all"]').classList.add('active');
-      activeFilter = 'all';
-    }
-    render();
-  });
-
-  // Bookmarks toggle
-  document.getElementById('btn-bookmarks').addEventListener('click', () => {
-    viewMode = viewMode === 'bookmarks' ? 'all' : 'bookmarks';
-    const btn = document.getElementById('btn-bookmarks');
-    btn.classList.toggle('active', viewMode === 'bookmarks');
-    render();
-  });
-
-  // Download progress
-  document.getElementById('btn-download').addEventListener('click', downloadProgress);
-
-  // Import progress
-  document.getElementById('btn-import').addEventListener('click', () => {
-    document.getElementById('import-input').click();
-  });
-  document.getElementById('import-input').addEventListener('change', e => {
-    if (e.target.files[0]) importProgress(e.target.files[0]);
-  });
-
-  // Keyboard close modal
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-  render();
-}
-
-document.addEventListener('DOMContentLoaded', init);
+// ─── Start ───────────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", fetchData);

@@ -1,818 +1,270 @@
 {
-  "sections": [
+  "categories": [
     {
       "id": "dsa",
       "label": "DSA",
-      "fullLabel": "Data Structures & Algorithms",
-      "icon": "🧮",
-      "color": "#166534",
-      "colorBg": "#f0fdf4",
-      "colorBorder": "#bbf7d0",
-      "categories": [
+      "fullName": "Data Structures & Algorithms",
+      "icon": "🧩",
+      "color": "#f97316",
+      "description": "Master arrays, trees, graphs, dynamic programming and more.",
+      "resources": [
         {
-          "id": "dsa-foundations",
-          "label": "Foundations",
-          "icon": "📐",
-          "iconBg": "#f0fdf4",
-          "tagBg": "#f0fdf4",
-          "tagColor": "#166534",
-          "resources": [
-            {
-              "id": "dsa-001",
-              "name": "Big-O Cheat Sheet",
-              "desc": "Time & space complexity for common algorithms and data structures.",
-              "href": "dsa/big-o-cheatsheet.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [
-                { "id": "d1", "author": "alice", "text": "Great reference! Always forget space complexity for merge sort.", "date": "2025-01-10" }
-              ],
-              "interviewQuestions": [
-                "What is the time complexity of binary search?",
-                "Explain amortized complexity with an example."
-              ]
-            },
-            {
-              "id": "dsa-002",
-              "name": "Top 75 LeetCode Problems",
-              "desc": "Curated list of must-solve problems by category.",
-              "href": "dsa/top75-leetcode.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": true,
-              "addedDate": "2025-06-01",
-              "discussions": [],
-              "interviewQuestions": ["Which LeetCode patterns are most common in FAANG interviews?"]
-            },
-            {
-              "id": "dsa-003",
-              "name": "Sorting Algorithms Guide",
-              "desc": "Quick sort, merge sort, heap sort — implementations & trade-offs.",
-              "href": "dsa/sorting-algorithms.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "When would you use merge sort over quick sort?",
-                "What is the worst case of quick sort and how to avoid it?"
-              ]
-            },
-            {
-              "id": "dsa-004",
-              "name": "Arrays & Strings Tricks",
-              "desc": "Sliding window, two pointers, prefix sums and more.",
-              "href": "dsa/arrays-strings.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            }
-          ]
+          "id": "dsa-01",
+          "title": "Arrays & Strings Cheatsheet",
+          "type": "html",
+          "difficulty": "Beginner",
+          "tags": ["arrays", "strings", "two-pointer"],
+          "path": "resources/dsa/arrays-strings.html",
+          "description": "Complete guide to array manipulation and string problems with patterns.",
+          "lastUpdated": "2025-04-01"
         },
         {
-          "id": "dsa-graphs",
-          "label": "Graphs & Advanced",
-          "icon": "🌳",
-          "iconBg": "#dcfce7",
-          "tagBg": "#dcfce7",
-          "tagColor": "#15803d",
-          "resources": [
-            {
-              "id": "dsa-005",
-              "name": "Graph Traversal Patterns",
-              "desc": "BFS, DFS, Dijkstra, topological sort with templates.",
-              "href": "dsa/graph-traversal.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            },
-            {
-              "id": "dsa-006",
-              "name": "Dynamic Programming Patterns",
-              "desc": "Memoization, tabulation, top-down vs bottom-up approaches.",
-              "href": "dsa/dynamic-programming.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "Explain the difference between memoization and tabulation.",
-                "How do you identify if a problem can be solved with DP?"
-              ]
-            },
-            {
-              "id": "dsa-007",
-              "name": "Backtracking Guide",
-              "desc": "N-Queens, Sudoku, permutations — patterns and templates.",
-              "href": "dsa/backtracking.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": false,
-              "addedDate": "2025-06-15",
-              "discussions": [],
-              "interviewQuestions": [
-                "How does backtracking differ from brute force?",
-                "Explain the backtracking template with an example."
-              ]
-            }
-          ]
+          "id": "dsa-02",
+          "title": "Linked Lists Deep Dive",
+          "type": "md",
+          "difficulty": "Beginner",
+          "tags": ["linked-list", "pointers", "reversal"],
+          "path": "resources/dsa/linked-lists.md",
+          "description": "Singly, doubly, circular linked lists with classic interview problems.",
+          "lastUpdated": "2025-04-05"
+        },
+        {
+          "id": "dsa-03",
+          "title": "Trees & Binary Search Trees",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["tree", "BST", "DFS", "BFS"],
+          "path": "resources/dsa/trees.html",
+          "description": "Tree traversals, BST operations, and common tree-based interview questions.",
+          "lastUpdated": "2025-04-10"
+        },
+        {
+          "id": "dsa-04",
+          "title": "Graph Algorithms",
+          "type": "html",
+          "difficulty": "Advanced",
+          "tags": ["graph", "BFS", "DFS", "Dijkstra", "topological"],
+          "path": "resources/dsa/graphs.html",
+          "description": "BFS, DFS, shortest paths, cycle detection, and topological sort.",
+          "lastUpdated": "2025-04-12"
+        },
+        {
+          "id": "dsa-05",
+          "title": "Dynamic Programming Patterns",
+          "type": "md",
+          "difficulty": "Advanced",
+          "tags": ["DP", "memoization", "tabulation"],
+          "path": "resources/dsa/dynamic-programming.md",
+          "description": "Top-down vs bottom-up DP with 20+ classic problems solved.",
+          "lastUpdated": "2025-04-15"
+        },
+        {
+          "id": "dsa-06",
+          "title": "Sorting & Searching",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["sorting", "binary-search", "quicksort", "mergesort"],
+          "path": "resources/dsa/sorting-searching.html",
+          "description": "All major sorting algorithms, binary search variants, and complexity analysis.",
+          "lastUpdated": "2025-04-18"
         }
       ]
     },
-
-    {
-      "id": "system-design",
-      "label": "System Design",
-      "fullLabel": "System Design — LLD & HLD",
-      "icon": "🏗️",
-      "color": "#1e40af",
-      "colorBg": "#eff6ff",
-      "colorBorder": "#bfdbfe",
-      "categories": [
-        {
-          "id": "hld",
-          "label": "HLD — High Level Design",
-          "icon": "🌐",
-          "iconBg": "#eff6ff",
-          "tagBg": "#eff6ff",
-          "tagColor": "#1e40af",
-          "resources": [
-            {
-              "id": "sd-001",
-              "name": "System Design Primer",
-              "desc": "A-to-Z guide: scalability, load balancing, caching, databases.",
-              "href": "system-design/primer.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "How would you scale a system from 1 to 10 million users?",
-                "What is the difference between horizontal and vertical scaling?"
-              ]
-            },
-            {
-              "id": "sd-002",
-              "name": "Design URL Shortener",
-              "desc": "Requirements, DB schema, API design — step-by-step.",
-              "href": "system-design/url-shortener.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            },
-            {
-              "id": "sd-003",
-              "name": "Design Twitter Feed",
-              "desc": "Newsfeed design with fan-out on write/read tradeoffs.",
-              "href": "system-design/twitter-feed.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": false,
-              "addedDate": "2025-06-10",
-              "discussions": [],
-              "interviewQuestions": ["Explain fan-out on write vs fan-out on read."]
-            },
-            {
-              "id": "sd-004",
-              "name": "CAP Theorem Explained",
-              "desc": "Consistency, availability, partition tolerance — with real examples.",
-              "href": "system-design/cap-theorem.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            },
-            {
-              "id": "sd-005",
-              "name": "API Design Best Practices",
-              "desc": "REST vs GraphQL, versioning, rate limiting, pagination.",
-              "href": "system-design/api-design.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            }
-          ]
-        },
-        {
-          "id": "lld",
-          "label": "LLD — Low Level Design",
-          "icon": "⚙️",
-          "iconBg": "#dbeafe",
-          "tagBg": "#dbeafe",
-          "tagColor": "#1e3a8a",
-          "resources": [
-            {
-              "id": "lld-001",
-              "name": "SOLID Principles Deep Dive",
-              "desc": "Single responsibility, open-closed, Liskov, interface segregation, dependency inversion.",
-              "href": "lld/solid-principles.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "Explain the Open/Closed principle with a Java example.",
-                "How does dependency inversion relate to dependency injection?"
-              ]
-            },
-            {
-              "id": "lld-002",
-              "name": "Design Patterns Catalog",
-              "desc": "Creational, structural, behavioral patterns with real-world examples.",
-              "href": "lld/design-patterns.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between Factory and Abstract Factory?",
-                "When would you use Observer vs Pub-Sub?"
-              ]
-            },
-            {
-              "id": "lld-003",
-              "name": "Design a Parking Lot",
-              "desc": "Classic LLD problem: classes, relationships, and extensibility.",
-              "href": "lld/parking-lot.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            },
-            {
-              "id": "lld-004",
-              "name": "Design an ATM System",
-              "desc": "State machine, OOP modeling, and transaction handling.",
-              "href": "lld/atm-system.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": false,
-              "addedDate": "2025-06-20",
-              "discussions": [],
-              "interviewQuestions": []
-            },
-            {
-              "id": "lld-005",
-              "name": "UML Class Diagrams",
-              "desc": "How to draw and read class diagrams for LLD interviews.",
-              "href": "lld/uml-class-diagrams.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            }
-          ]
-        }
-      ]
-    },
-
     {
       "id": "java",
       "label": "Java",
-      "fullLabel": "Java — Core, Concurrency & JVM",
+      "fullName": "Java Programming",
       "icon": "☕",
-      "color": "#9f1239",
-      "colorBg": "#fff1f2",
-      "colorBorder": "#fecdd3",
-      "categories": [
+      "color": "#3b82f6",
+      "description": "Core Java concepts, OOP, collections, concurrency and JVM internals.",
+      "resources": [
         {
-          "id": "java-core",
-          "label": "Core Java",
-          "icon": "☕",
-          "iconBg": "#fff1f2",
-          "tagBg": "#fff1f2",
-          "tagColor": "#9f1239",
-          "resources": [
-            {
-              "id": "java-001",
-              "name": "Java Core Concepts",
-              "desc": "OOP, inheritance, polymorphism, interfaces, abstract classes.",
-              "href": "java/java-core.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between abstract class and interface in Java?",
-                "Explain method overloading vs overriding."
-              ]
-            },
-            {
-              "id": "java-002",
-              "name": "Java Collections Framework",
-              "desc": "List, Set, Map, Queue internals and when to use each.",
-              "href": "java/collections.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between HashMap and ConcurrentHashMap?",
-                "When would you use LinkedHashMap over HashMap?"
-              ]
-            },
-            {
-              "id": "java-003",
-              "name": "Java 8+ Features",
-              "desc": "Streams, lambdas, Optional, functional interfaces, date/time.",
-              "href": "java/java8-features.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between map() and flatMap() in streams?",
-                "Explain the Optional class and when to use it."
-              ]
-            },
-            {
-              "id": "java-004",
-              "name": "Concurrency in Java",
-              "desc": "Threads, ExecutorService, synchronized, locks, volatile.",
-              "href": "java/concurrency.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between synchronized and ReentrantLock?",
-                "Explain the Java memory model."
-              ]
-            },
-            {
-              "id": "java-005",
-              "name": "JVM Internals",
-              "desc": "Heap, stack, GC algorithms, class loading, JIT compilation.",
-              "href": "java/jvm-internals.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": false,
-              "addedDate": "2025-06-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "Explain the difference between minor GC and major GC.",
-                "How does the G1 garbage collector work?"
-              ]
-            }
-          ]
+          "id": "java-01",
+          "title": "OOP Concepts & SOLID Principles",
+          "type": "html",
+          "difficulty": "Beginner",
+          "tags": ["OOP", "SOLID", "inheritance", "polymorphism"],
+          "path": "resources/java/oop-solid.html",
+          "description": "Encapsulation, inheritance, polymorphism with real-world SOLID examples.",
+          "lastUpdated": "2025-03-20"
+        },
+        {
+          "id": "java-02",
+          "title": "Java Collections Framework",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["collections", "HashMap", "ArrayList", "Set"],
+          "path": "resources/java/collections.html",
+          "description": "Internals of ArrayList, LinkedList, HashMap, TreeMap, HashSet and when to use each.",
+          "lastUpdated": "2025-03-25"
+        },
+        {
+          "id": "java-03",
+          "title": "Multithreading & Concurrency",
+          "type": "md",
+          "difficulty": "Advanced",
+          "tags": ["threads", "concurrency", "synchronized", "locks"],
+          "path": "resources/java/concurrency.md",
+          "description": "Thread lifecycle, synchronization, ExecutorService, and concurrent data structures.",
+          "lastUpdated": "2025-04-02"
+        },
+        {
+          "id": "java-04",
+          "title": "Java 8+ Features",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["streams", "lambda", "Optional", "functional"],
+          "path": "resources/java/java8-features.html",
+          "description": "Lambdas, Stream API, Optional, method references, and CompletableFuture.",
+          "lastUpdated": "2025-04-08"
+        },
+        {
+          "id": "java-05",
+          "title": "JVM Internals & Memory Model",
+          "type": "md",
+          "difficulty": "Advanced",
+          "tags": ["JVM", "GC", "heap", "stack", "classloader"],
+          "path": "resources/java/jvm-internals.md",
+          "description": "Heap, stack, metaspace, garbage collection algorithms, and JIT compilation.",
+          "lastUpdated": "2025-04-11"
         }
       ]
     },
-
-    {
-      "id": "spring",
-      "label": "Spring",
-      "fullLabel": "Spring Framework & Spring Boot",
-      "icon": "🌿",
-      "color": "#166534",
-      "colorBg": "#f0fdf4",
-      "colorBorder": "#86efac",
-      "categories": [
-        {
-          "id": "spring-core",
-          "label": "Spring Core & Boot",
-          "icon": "🌿",
-          "iconBg": "#f0fdf4",
-          "tagBg": "#f0fdf4",
-          "tagColor": "#166534",
-          "resources": [
-            {
-              "id": "spring-001",
-              "name": "Spring Boot Interview Q&A",
-              "desc": "IoC, DI, AOP, annotations, REST controllers, JPA.",
-              "href": "spring/spring-boot.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "Explain how Spring's dependency injection works.",
-                "What is the difference between @Component, @Service, and @Repository?",
-                "What is @Autowired and how does it resolve ambiguity?"
-              ]
-            },
-            {
-              "id": "spring-002",
-              "name": "Spring AOP Deep Dive",
-              "desc": "Aspects, pointcuts, advice types, and proxy mechanisms.",
-              "href": "spring/aop.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between @Before, @After, and @Around advice?"
-              ]
-            },
-            {
-              "id": "spring-003",
-              "name": "Spring Data JPA",
-              "desc": "Repositories, JPQL, query methods, transactions, N+1 problem.",
-              "href": "spring/spring-data-jpa.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "How do you solve the N+1 query problem in Spring Data JPA?",
-                "Explain @Transactional propagation types."
-              ]
-            },
-            {
-              "id": "spring-004",
-              "name": "Spring Security Basics",
-              "desc": "Authentication, authorization, JWT, OAuth2, filter chain.",
-              "href": "spring/security.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            },
-            {
-              "id": "spring-005",
-              "name": "Spring Microservices Patterns",
-              "desc": "Service discovery, circuit breaker, API gateway with Spring Cloud.",
-              "href": "spring/microservices.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": true,
-              "addedDate": "2025-06-10",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is a circuit breaker and how does Resilience4j implement it?",
-                "Explain the difference between Feign and RestTemplate."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-
-    {
-      "id": "angular",
-      "label": "Angular",
-      "fullLabel": "Angular — Components, RxJS & State",
-      "icon": "🅰️",
-      "color": "#b91c1c",
-      "colorBg": "#fff1f2",
-      "colorBorder": "#fca5a5",
-      "categories": [
-        {
-          "id": "angular-core",
-          "label": "Core Concepts",
-          "icon": "🅰️",
-          "iconBg": "#fff1f2",
-          "tagBg": "#fff1f2",
-          "tagColor": "#b91c1c",
-          "resources": [
-            {
-              "id": "ng-001",
-              "name": "Angular Architecture Guide",
-              "desc": "Modules, components, services, dependency injection, change detection.",
-              "href": "angular/architecture.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between OnPush and Default change detection?",
-                "Explain Angular's DI hierarchy."
-              ]
-            },
-            {
-              "id": "ng-002",
-              "name": "RxJS Operators Cheat Sheet",
-              "desc": "map, switchMap, mergeMap, combineLatest, debounceTime — with examples.",
-              "href": "angular/rxjs-operators.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between switchMap and mergeMap?",
-                "When would you use Subject vs BehaviorSubject?"
-              ]
-            },
-            {
-              "id": "ng-003",
-              "name": "Angular Routing & Guards",
-              "desc": "RouterModule, lazy loading, route guards, resolvers.",
-              "href": "angular/routing.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            },
-            {
-              "id": "ng-004",
-              "name": "Angular Forms Deep Dive",
-              "desc": "Template-driven vs reactive forms, validators, FormBuilder.",
-              "href": "angular/forms.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between template-driven and reactive forms?"
-              ]
-            },
-            {
-              "id": "ng-005",
-              "name": "NgRx State Management",
-              "desc": "Actions, reducers, effects, selectors — full NgRx pattern.",
-              "href": "angular/ngrx.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": true,
-              "addedDate": "2025-06-20",
-              "discussions": [],
-              "interviewQuestions": [
-                "Explain the NgRx data flow: action → reducer → store → selector.",
-                "When would you use NgRx Effects?"
-              ]
-            },
-            {
-              "id": "ng-006",
-              "name": "Angular Performance Tips",
-              "desc": "TrackBy, memoization, AOT, bundle optimization, lazy loading.",
-              "href": "angular/performance.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            }
-          ]
-        }
-      ]
-    },
-
     {
       "id": "javascript",
       "label": "JavaScript",
-      "fullLabel": "JavaScript & TypeScript",
-      "icon": "🟨",
-      "color": "#854d0e",
-      "colorBg": "#fffbeb",
-      "colorBorder": "#fde68a",
-      "categories": [
+      "fullName": "JavaScript & TypeScript",
+      "icon": "⚡",
+      "color": "#eab308",
+      "description": "Modern JS, async patterns, closures, TypeScript, and browser APIs.",
+      "resources": [
         {
-          "id": "js-core",
-          "label": "Core JavaScript",
-          "icon": "🟨",
-          "iconBg": "#fffbeb",
-          "tagBg": "#fffbeb",
-          "tagColor": "#854d0e",
-          "resources": [
-            {
-              "id": "js-001",
-              "name": "JavaScript Interview Q&A",
-              "desc": "Closures, event loop, prototypes, ES6+, async/await deep dives.",
-              "href": "javascript/javascript-qa.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "Explain how the JavaScript event loop works.",
-                "What is a closure? Give a practical example.",
-                "What is the difference between == and ===?"
-              ]
-            },
-            {
-              "id": "js-002",
-              "name": "Promises & Async/Await",
-              "desc": "Microtask queue, Promise chaining, error handling, Promise.all.",
-              "href": "javascript/promises-async.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between Promise.all and Promise.allSettled?",
-                "How does async/await relate to Promises?"
-              ]
-            },
-            {
-              "id": "js-003",
-              "name": "Prototypes & Inheritance",
-              "desc": "Prototype chain, __proto__, Object.create, class syntax.",
-              "href": "javascript/prototypes.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            },
-            {
-              "id": "js-004",
-              "name": "TypeScript Essentials",
-              "desc": "Types, interfaces, generics, decorators, utility types.",
-              "href": "javascript/typescript.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between type and interface in TypeScript?",
-                "Explain TypeScript generics with an example."
-              ]
-            },
-            {
-              "id": "js-005",
-              "name": "React Concepts Cheat Sheet",
-              "desc": "Hooks, lifecycle, state management, performance optimization.",
-              "href": "javascript/react-cheatsheet.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between useEffect and useLayoutEffect?",
-                "Explain React's reconciliation algorithm."
-              ]
-            },
-            {
-              "id": "js-006",
-              "name": "Node.js Interview Questions",
-              "desc": "Event-driven architecture, streams, clusters, and npm.",
-              "href": "javascript/nodejs-questions.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": []
-            }
-          ]
+          "id": "js-01",
+          "title": "Closures & Scope",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["closure", "scope", "hoisting", "IIFE"],
+          "path": "resources/javascript/closures-scope.html",
+          "description": "Lexical scope, closure patterns, hoisting, and the module pattern explained.",
+          "lastUpdated": "2025-03-15"
+        },
+        {
+          "id": "js-02",
+          "title": "Async JavaScript: Promises & Async/Await",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["async", "promises", "event-loop", "callbacks"],
+          "path": "resources/javascript/async-javascript.html",
+          "description": "Event loop, call stack, promises, async/await, and error handling patterns.",
+          "lastUpdated": "2025-03-22"
+        },
+        {
+          "id": "js-03",
+          "title": "Prototypes & Class Inheritance",
+          "type": "md",
+          "difficulty": "Intermediate",
+          "tags": ["prototype", "class", "inheritance", "this"],
+          "path": "resources/javascript/prototypes.md",
+          "description": "Prototype chain, ES6 classes, inheritance patterns, and the 'this' keyword.",
+          "lastUpdated": "2025-04-01"
+        },
+        {
+          "id": "js-04",
+          "title": "TypeScript Essentials",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["TypeScript", "types", "generics", "interfaces"],
+          "path": "resources/javascript/typescript.html",
+          "description": "Types, interfaces, generics, enums, utility types, and strict mode.",
+          "lastUpdated": "2025-04-14"
+        },
+        {
+          "id": "js-05",
+          "title": "Design Patterns in JavaScript",
+          "type": "md",
+          "difficulty": "Advanced",
+          "tags": ["patterns", "observer", "factory", "singleton"],
+          "path": "resources/javascript/design-patterns.md",
+          "description": "Observer, factory, singleton, decorator, and strategy patterns in modern JS.",
+          "lastUpdated": "2025-04-17"
         }
       ]
     },
-
     {
-      "id": "sql",
-      "label": "SQL",
-      "fullLabel": "SQL & Databases",
-      "icon": "🗄️",
-      "color": "#115e59",
-      "colorBg": "#f0fdfa",
-      "colorBorder": "#99f6e4",
-      "categories": [
+      "id": "system-design",
+      "label": "System Design",
+      "fullName": "System Design",
+      "icon": "🏗️",
+      "color": "#8b5cf6",
+      "description": "Scalable systems, distributed architecture, databases, and design patterns.",
+      "resources": [
         {
-          "id": "sql-core",
-          "label": "SQL Fundamentals",
-          "icon": "🗄️",
-          "iconBg": "#f0fdfa",
-          "tagBg": "#f0fdfa",
-          "tagColor": "#115e59",
-          "resources": [
-            {
-              "id": "sql-001",
-              "name": "SQL Query Patterns",
-              "desc": "JOINs, subqueries, window functions, CTEs with worked examples.",
-              "href": "sql/sql-patterns.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between INNER JOIN and LEFT JOIN?",
-                "Explain window functions with an example."
-              ]
-            },
-            {
-              "id": "sql-002",
-              "name": "Database Indexing Guide",
-              "desc": "B-tree, hash, composite indexes — when and why to use them.",
-              "href": "sql/indexing.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": true,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "When would a composite index NOT be used?",
-                "What is a covering index?"
-              ]
-            },
-            {
-              "id": "sql-003",
-              "name": "ACID Properties Explained",
-              "desc": "Transactions, isolation levels, and locking strategies.",
-              "href": "sql/acid.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "What is the difference between READ COMMITTED and REPEATABLE READ?",
-                "Explain phantom reads and how to prevent them."
-              ]
-            },
-            {
-              "id": "sql-004",
-              "name": "Query Optimization",
-              "desc": "EXPLAIN plans, index tuning, slow query analysis.",
-              "href": "sql/query-optimization.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": true,
-              "addedDate": "2025-06-25",
-              "discussions": [],
-              "interviewQuestions": [
-                "How do you interpret an EXPLAIN output in MySQL/PostgreSQL?"
-              ]
-            }
-          ]
+          "id": "sd-01",
+          "title": "System Design Fundamentals",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["scalability", "availability", "CAP", "load-balancing"],
+          "path": "resources/system-design/fundamentals.html",
+          "description": "Scalability, availability, reliability, CAP theorem, and load balancing explained.",
+          "lastUpdated": "2025-03-10"
         },
         {
-          "id": "nosql",
-          "label": "NoSQL & Comparisons",
-          "icon": "📦",
-          "iconBg": "#ccfbf1",
-          "tagBg": "#ccfbf1",
-          "tagColor": "#0f766e",
-          "resources": [
-            {
-              "id": "sql-005",
-              "name": "NoSQL vs SQL Decision Guide",
-              "desc": "Postgres, MongoDB, Redis, Cassandra use-case comparison.",
-              "href": "sql/nosql-vs-sql.md",
-              "type": "md",
-              "isNew": false,
-              "isHot": false,
-              "addedDate": "2025-01-01",
-              "discussions": [],
-              "interviewQuestions": [
-                "When would you choose MongoDB over PostgreSQL?",
-                "Explain eventual consistency in the context of NoSQL databases."
-              ]
-            },
-            {
-              "id": "sql-006",
-              "name": "Redis Patterns",
-              "desc": "Caching, pub/sub, sorted sets, distributed locks with Redis.",
-              "href": "sql/redis-patterns.md",
-              "type": "md",
-              "isNew": true,
-              "isHot": true,
-              "addedDate": "2025-06-15",
-              "discussions": [],
-              "interviewQuestions": [
-                "How would you implement a rate limiter using Redis?",
-                "What is the difference between Redis persistence modes (RDB vs AOF)?"
-              ]
-            }
-          ]
+          "id": "sd-02",
+          "title": "Database Design & SQL vs NoSQL",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["database", "SQL", "NoSQL", "indexing", "sharding"],
+          "path": "resources/system-design/database-design.html",
+          "description": "Relational vs NoSQL, indexing strategies, sharding, replication, and ACID properties.",
+          "lastUpdated": "2025-03-18"
+        },
+        {
+          "id": "sd-03",
+          "title": "Caching Strategies",
+          "type": "md",
+          "difficulty": "Intermediate",
+          "tags": ["cache", "Redis", "CDN", "eviction", "write-through"],
+          "path": "resources/system-design/caching.md",
+          "description": "Cache types, eviction policies, Redis patterns, CDN, and cache invalidation.",
+          "lastUpdated": "2025-03-28"
+        },
+        {
+          "id": "sd-04",
+          "title": "Designing URL Shortener",
+          "type": "html",
+          "difficulty": "Intermediate",
+          "tags": ["case-study", "hashing", "redirection", "analytics"],
+          "path": "resources/system-design/url-shortener.html",
+          "description": "End-to-end design of a URL shortener with 100M+ URLs, including API and DB schema.",
+          "lastUpdated": "2025-04-03"
+        },
+        {
+          "id": "sd-05",
+          "title": "Designing Twitter / Social Feed",
+          "type": "html",
+          "difficulty": "Advanced",
+          "tags": ["case-study", "fanout", "timeline", "real-time"],
+          "path": "resources/system-design/twitter-design.html",
+          "description": "News feed generation, fanout on read vs write, media storage, and real-time updates.",
+          "lastUpdated": "2025-04-09"
+        },
+        {
+          "id": "sd-06",
+          "title": "Message Queues & Event-Driven Architecture",
+          "type": "md",
+          "difficulty": "Advanced",
+          "tags": ["kafka", "rabbitmq", "event-driven", "pub-sub"],
+          "path": "resources/system-design/message-queues.md",
+          "description": "Kafka, RabbitMQ, pub-sub patterns, exactly-once delivery, and event sourcing.",
+          "lastUpdated": "2025-04-16"
         }
       ]
     }
-  ]
+  ],
+  "meta": {
+    "totalResources": 21,
+    "lastUpdated": "2025-04-20",
+    "version": "1.0.0",
+    "author": "Interview Hub"
+  }
 }

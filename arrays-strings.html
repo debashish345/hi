@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arrays & Strings — DSA Cheatsheet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Syne', sans-serif; background: #0a0a0a; color: #e4e4e7; }
+    code, pre { font-family: 'Space Mono', monospace; }
+    .token-keyword { color: #c084fc; }
+    .token-string { color: #86efac; }
+    .token-comment { color: #52525b; }
+    pre { background: #111; border: 1px solid #27272a; border-radius: 12px; padding: 1.25rem; overflow-x: auto; font-size: 0.8rem; line-height: 1.7; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="max-w-4xl mx-auto px-6 py-12">
+
+    <!-- Back -->
+    <a href="../../index.html" class="inline-flex items-center gap-2 text-zinc-500 hover:text-violet-400 text-sm mb-8 transition-colors">
+      ← Back to Hub
+    </a>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-3xl">🧩</span>
+        <span class="px-3 py-1 bg-orange-500/15 text-orange-400 rounded-full text-xs font-bold">DSA · Beginner</span>
+        <span class="px-3 py-1 bg-blue-500/15 text-blue-400 rounded-full text-xs font-bold">HTML</span>
+      </div>
+      <h1 class="text-4xl font-extrabold text-white mb-3">Arrays & Strings Cheatsheet</h1>
+      <p class="text-zinc-400 text-lg">Complete guide to array manipulation and string problems with key patterns.</p>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <span class="px-2 py-1 bg-orange-500/10 text-orange-400/80 rounded-md text-xs font-mono">#arrays</span>
+        <span class="px-2 py-1 bg-orange-500/10 text-orange-400/80 rounded-md text-xs font-mono">#strings</span>
+        <span class="px-2 py-1 bg-orange-500/10 text-orange-400/80 rounded-md text-xs font-mono">#two-pointer</span>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="space-y-10">
+
+      <!-- Two Pointer -->
+      <section>
+        <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <span class="w-1 h-7 bg-orange-500 rounded-full"></span> Two Pointer Pattern
+        </h2>
+        <p class="text-zinc-400 mb-4">Use two pointers moving toward each other to solve sorted array problems in O(n).</p>
+        <pre><code><span class="token-comment">// Two Sum - Sorted Array</span>
+<span class="token-keyword">function</span> twoSum(nums, target) {
+  <span class="token-keyword">let</span> left = 0, right = nums.length - 1;
+  <span class="token-keyword">while</span> (left &lt; right) {
+    <span class="token-keyword">const</span> sum = nums[left] + nums[right];
+    <span class="token-keyword">if</span> (sum === target) <span class="token-keyword">return</span> [left, right];
+    <span class="token-keyword">else if</span> (sum &lt; target) left++;
+    <span class="token-keyword">else</span> right--;
+  }
+  <span class="token-keyword">return</span> [];
+}</code></pre>
+      </section>
+
+      <!-- Sliding Window -->
+      <section>
+        <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <span class="w-1 h-7 bg-orange-500 rounded-full"></span> Sliding Window Pattern
+        </h2>
+        <p class="text-zinc-400 mb-4">Find subarrays or substrings satisfying a condition in O(n).</p>
+        <pre><code><span class="token-comment">// Max Sum Subarray of size k</span>
+<span class="token-keyword">function</span> maxSumSubarray(arr, k) {
+  <span class="token-keyword">let</span> windowSum = 0, maxSum = 0;
+  <span class="token-keyword">for</span> (<span class="token-keyword">let</span> i = 0; i &lt; arr.length; i++) {
+    windowSum += arr[i];
+    <span class="token-keyword">if</span> (i >= k - 1) {
+      maxSum = Math.max(maxSum, windowSum);
+      windowSum -= arr[i - k + 1];
+    }
+  }
+  <span class="token-keyword">return</span> maxSum;
+}</code></pre>
+      </section>
+
+      <!-- Complexity Table -->
+      <section>
+        <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <span class="w-1 h-7 bg-orange-500 rounded-full"></span> Array Operation Complexities
+        </h2>
+        <div class="overflow-x-auto rounded-xl border border-zinc-800">
+          <table class="w-full text-sm">
+            <thead class="bg-zinc-900">
+              <tr>
+                <th class="px-5 py-3 text-left text-zinc-400 font-semibold">Operation</th>
+                <th class="px-5 py-3 text-left text-zinc-400 font-semibold">Time</th>
+                <th class="px-5 py-3 text-left text-zinc-400 font-semibold">Space</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-800/50">
+              <tr class="hover:bg-zinc-900/40"><td class="px-5 py-3 text-zinc-300">Access by index</td><td class="px-5 py-3 text-green-400 font-mono">O(1)</td><td class="px-5 py-3 text-zinc-500 font-mono">O(1)</td></tr>
+              <tr class="hover:bg-zinc-900/40"><td class="px-5 py-3 text-zinc-300">Search (unsorted)</td><td class="px-5 py-3 text-yellow-400 font-mono">O(n)</td><td class="px-5 py-3 text-zinc-500 font-mono">O(1)</td></tr>
+              <tr class="hover:bg-zinc-900/40"><td class="px-5 py-3 text-zinc-300">Insert at end</td><td class="px-5 py-3 text-green-400 font-mono">O(1)</td><td class="px-5 py-3 text-zinc-500 font-mono">O(1)</td></tr>
+              <tr class="hover:bg-zinc-900/40"><td class="px-5 py-3 text-zinc-300">Insert at middle</td><td class="px-5 py-3 text-yellow-400 font-mono">O(n)</td><td class="px-5 py-3 text-zinc-500 font-mono">O(1)</td></tr>
+              <tr class="hover:bg-zinc-900/40"><td class="px-5 py-3 text-zinc-300">Delete at middle</td><td class="px-5 py-3 text-yellow-400 font-mono">O(n)</td><td class="px-5 py-3 text-zinc-500 font-mono">O(1)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</body>
+</html>
