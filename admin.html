@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Interview Resources</title>
+  <meta name="description" content="Manage your Interview Resources JSON structure via this admin panel." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────── -->
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-logo">
+        <a href="index.html" class="back-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <span class="admin-logo-icon">⚙️</span>
+        <div>
+          <h1>Admin Panel</h1>
+          <p>Manage resources.json</p>
+        </div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn btn-secondary" id="btn-load-json" title="Load JSON from file">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Load JSON
+        </button>
+        <button class="btn btn-primary" id="btn-download-json" title="Download resources.json">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download JSON
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main Layout ─────────────────────────────────────────────── -->
+  <div class="admin-layout">
+
+    <!-- ── Left Panel: Tree ───────────────────────────────────────── -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-header">
+        <h2>Categories</h2>
+        <button class="btn btn-sm btn-accent" id="btn-add-category" title="Add Category">+ Category</button>
+      </div>
+      <div class="tree-container" id="tree-container">
+        <!-- Tree populated by JS -->
+      </div>
+    </aside>
+
+    <!-- ── Center Panel: Editor ───────────────────────────────────── -->
+    <main class="admin-main" id="admin-main">
+      <div class="editor-placeholder" id="editor-placeholder">
+        <span class="placeholder-icon">📝</span>
+        <h3>Select an item from the tree</h3>
+        <p>Click a category, subcategory, or resource to edit it</p>
+      </div>
+
+      <!-- Category Editor -->
+      <div class="editor-panel hidden" id="editor-category">
+        <div class="editor-header">
+          <h2 id="editor-cat-title">Edit Category</h2>
+          <div class="editor-actions">
+            <button class="btn btn-sm btn-accent" id="btn-add-subcategory">+ Subcategory</button>
+            <button class="btn btn-sm btn-danger" id="btn-delete-category">Delete</button>
+          </div>
+        </div>
+        <form id="form-category" class="editor-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>ID</label>
+              <input type="text" id="cat-id" required />
+            </div>
+            <div class="form-group">
+              <label>Label</label>
+              <input type="text" id="cat-label" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="cat-fullname" />
+            </div>
+            <div class="form-group">
+              <label>Icon (emoji)</label>
+              <input type="text" id="cat-icon" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Color (hex)</label>
+              <input type="color" id="cat-color" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="cat-description" rows="2"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+
+      <!-- Subcategory Editor -->
+      <div class="editor-panel hidden" id="editor-subcategory">
+        <div class="editor-header">
+          <h2 id="editor-sub-title">Edit Subcategory</h2>
+          <div class="editor-actions">
+            <button class="btn btn-sm btn-accent" id="btn-add-resource">+ Resource</button>
+            <button class="btn btn-sm btn-danger" id="btn-delete-subcategory">Delete</button>
+          </div>
+        </div>
+        <form id="form-subcategory" class="editor-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>ID</label>
+              <input type="text" id="sub-id" required />
+            </div>
+            <div class="form-group">
+              <label>Label</label>
+              <input type="text" id="sub-label" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+
+      <!-- Resource Editor -->
+      <div class="editor-panel hidden" id="editor-resource">
+        <div class="editor-header">
+          <h2 id="editor-res-title">Edit Resource</h2>
+          <div class="editor-actions">
+            <button class="btn btn-sm btn-danger" id="btn-delete-resource">Delete</button>
+          </div>
+        </div>
+        <form id="form-resource" class="editor-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>ID</label>
+              <input type="text" id="res-id" required />
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="res-title" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Type</label>
+              <select id="res-type">
+                <option value="html">HTML</option>
+                <option value="md">Markdown</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Difficulty</label>
+              <select id="res-difficulty">
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Path</label>
+            <input type="text" id="res-path" placeholder="data/java/oop-solid.html" />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="res-description" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Tags (comma-separated)</label>
+            <input type="text" id="res-tags" placeholder="OOP, SOLID, inheritance" />
+          </div>
+          <div class="form-group">
+            <label>Last Updated</label>
+            <input type="date" id="res-lastUpdated" />
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </main>
+
+    <!-- ── Right Panel: JSON Preview ─────────────────────────────── -->
+    <aside class="admin-preview" id="admin-preview">
+      <div class="preview-header">
+        <h2>JSON Preview</h2>
+        <button class="btn btn-sm btn-secondary" id="btn-copy-json" title="Copy to clipboard">Copy</button>
+      </div>
+      <pre id="json-preview" class="json-preview"><code></code></pre>
+    </aside>
+
+  </div>
+
+  <!-- ── Hidden file input ───────────────────────────────────────── -->
+  <input type="file" id="file-input" accept=".json" style="display:none" />
+
+  <!-- ── Toast ───────────────────────────────────────────────────── -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Admin JS -->
+  <script src="js/admin.js"></script>
+</body>
+</html>

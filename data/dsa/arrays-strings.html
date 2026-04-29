@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arrays & Strings — DSA Cheatsheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f8f9fa; color: #212529; margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+    .back { display: inline-flex; align-items: center; gap: 6px; color: #868e96; text-decoration: none; font-size: 13px; margin-bottom: 24px; transition: color 0.2s; }
+    .back:hover { color: #228be6; }
+    .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; display: inline-block; }
+    .badge-cat { background: #fff4e6; color: #e8590c; }
+    .badge-diff { background: #ebfbee; color: #2b8a3e; }
+    h1 { font-size: 28px; font-weight: 800; margin: 12px 0 8px; }
+    .desc { color: #495057; font-size: 15px; margin-bottom: 16px; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: #fff4e6; color: #e8590c; }
+    h2 { font-size: 20px; font-weight: 700; margin: 32px 0 12px; display: flex; align-items: center; gap: 8px; }
+    h2 .bar { width: 4px; height: 24px; border-radius: 4px; background: #f97316; }
+    p { color: #495057; line-height: 1.7; margin-bottom: 12px; }
+    pre { background: #1e1e2e; color: #cdd6f4; border-radius: 10px; padding: 20px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; margin-bottom: 24px; }
+    .kw { color: #cba6f7; }
+    .str { color: #a6e3a1; }
+    .cmt { color: #585b70; }
+    table { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; border: 1px solid #e9ecef; margin-bottom: 24px; }
+    th { background: #f1f3f5; padding: 10px 16px; text-align: left; font-size: 12px; font-weight: 600; color: #495057; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 10px 16px; font-size: 13px; border-top: 1px solid #f1f3f5; }
+    tr:hover { background: #f8f9fa; }
+    .good { color: #2b8a3e; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+    .mid { color: #e8590c; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../../index.html" class="back">← Back to Hub</a>
+
+    <div>
+      <span class="badge badge-cat">DSA · Beginner</span>
+      <span class="badge badge-diff">HTML</span>
+    </div>
+    <h1>Arrays & Strings Cheatsheet</h1>
+    <p class="desc">Complete guide to array manipulation and string problems with patterns.</p>
+    <div class="tags">
+      <span class="tag">#arrays</span>
+      <span class="tag">#strings</span>
+      <span class="tag">#two-pointer</span>
+    </div>
+
+    <h2><span class="bar"></span> Two Pointer Pattern</h2>
+    <p>Use two pointers moving toward each other to solve sorted array problems in O(n).</p>
+    <pre><code><span class="cmt">// Two Sum - Sorted Array</span>
+<span class="kw">function</span> twoSum(nums, target) {
+  <span class="kw">let</span> left = 0, right = nums.length - 1;
+  <span class="kw">while</span> (left &lt; right) {
+    <span class="kw">const</span> sum = nums[left] + nums[right];
+    <span class="kw">if</span> (sum === target) <span class="kw">return</span> [left, right];
+    <span class="kw">else if</span> (sum &lt; target) left++;
+    <span class="kw">else</span> right--;
+  }
+  <span class="kw">return</span> [];
+}</code></pre>
+
+    <h2><span class="bar"></span> Sliding Window Pattern</h2>
+    <p>Find subarrays or substrings satisfying a condition in O(n).</p>
+    <pre><code><span class="cmt">// Max Sum Subarray of size k</span>
+<span class="kw">function</span> maxSumSubarray(arr, k) {
+  <span class="kw">let</span> windowSum = 0, maxSum = 0;
+  <span class="kw">for</span> (<span class="kw">let</span> i = 0; i &lt; arr.length; i++) {
+    windowSum += arr[i];
+    <span class="kw">if</span> (i >= k - 1) {
+      maxSum = Math.max(maxSum, windowSum);
+      windowSum -= arr[i - k + 1];
+    }
+  }
+  <span class="kw">return</span> maxSum;
+}</code></pre>
+
+    <h2><span class="bar"></span> Array Operation Complexities</h2>
+    <table>
+      <thead>
+        <tr><th>Operation</th><th>Time</th><th>Space</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Access by index</td><td class="good">O(1)</td><td>O(1)</td></tr>
+        <tr><td>Search (unsorted)</td><td class="mid">O(n)</td><td>O(1)</td></tr>
+        <tr><td>Insert at end</td><td class="good">O(1)</td><td>O(1)</td></tr>
+        <tr><td>Insert at middle</td><td class="mid">O(n)</td><td>O(1)</td></tr>
+        <tr><td>Delete at middle</td><td class="mid">O(n)</td><td>O(1)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

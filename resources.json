@@ -7,66 +7,90 @@
       "icon": "🧩",
       "color": "#f97316",
       "description": "Master arrays, trees, graphs, dynamic programming and more.",
-      "resources": [
+      "subcategories": [
         {
-          "id": "dsa-01",
-          "title": "Arrays & Strings Cheatsheet",
-          "type": "html",
-          "difficulty": "Beginner",
-          "tags": ["arrays", "strings", "two-pointer"],
-          "path": "resources/dsa/arrays-strings.html",
-          "description": "Complete guide to array manipulation and string problems with patterns.",
-          "lastUpdated": "2025-04-01"
+          "id": "dsa-arrays",
+          "label": "Arrays & Strings",
+          "resources": [
+            {
+              "id": "dsa-01",
+              "title": "Arrays & Strings Cheatsheet",
+              "type": "html",
+              "difficulty": "Beginner",
+              "tags": ["arrays", "strings", "two-pointer"],
+              "path": "data/dsa/arrays-strings.html",
+              "description": "Complete guide to array manipulation and string problems with patterns.",
+              "lastUpdated": "2025-04-01"
+            },
+            {
+              "id": "dsa-06",
+              "title": "Sorting & Searching",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["sorting", "binary-search", "quicksort"],
+              "path": "data/dsa/sorting-searching.html",
+              "description": "All major sorting algorithms, binary search variants, and complexity analysis.",
+              "lastUpdated": "2025-04-18"
+            }
+          ]
         },
         {
-          "id": "dsa-02",
-          "title": "Linked Lists Deep Dive",
-          "type": "md",
-          "difficulty": "Beginner",
-          "tags": ["linked-list", "pointers", "reversal"],
-          "path": "resources/dsa/linked-lists.md",
-          "description": "Singly, doubly, circular linked lists with classic interview problems.",
-          "lastUpdated": "2025-04-05"
+          "id": "dsa-linked-lists",
+          "label": "Linked Lists",
+          "resources": [
+            {
+              "id": "dsa-02",
+              "title": "Linked Lists Deep Dive",
+              "type": "md",
+              "difficulty": "Beginner",
+              "tags": ["linked-list", "pointers", "reversal"],
+              "path": "data/dsa/linked-lists.md",
+              "description": "Singly, doubly, circular linked lists with classic interview problems.",
+              "lastUpdated": "2025-04-05"
+            }
+          ]
         },
         {
-          "id": "dsa-03",
-          "title": "Trees & Binary Search Trees",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["tree", "BST", "DFS", "BFS"],
-          "path": "resources/dsa/trees.html",
-          "description": "Tree traversals, BST operations, and common tree-based interview questions.",
-          "lastUpdated": "2025-04-10"
+          "id": "dsa-trees-graphs",
+          "label": "Trees & Graphs",
+          "resources": [
+            {
+              "id": "dsa-03",
+              "title": "Trees & Binary Search Trees",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["tree", "BST", "DFS", "BFS"],
+              "path": "data/dsa/trees.html",
+              "description": "Tree traversals, BST operations, and common tree-based interview questions.",
+              "lastUpdated": "2025-04-10"
+            },
+            {
+              "id": "dsa-04",
+              "title": "Graph Algorithms",
+              "type": "html",
+              "difficulty": "Advanced",
+              "tags": ["graph", "BFS", "DFS", "Dijkstra"],
+              "path": "data/dsa/graphs.html",
+              "description": "BFS, DFS, shortest paths, cycle detection, and topological sort.",
+              "lastUpdated": "2025-04-12"
+            }
+          ]
         },
         {
-          "id": "dsa-04",
-          "title": "Graph Algorithms",
-          "type": "html",
-          "difficulty": "Advanced",
-          "tags": ["graph", "BFS", "DFS", "Dijkstra", "topological"],
-          "path": "resources/dsa/graphs.html",
-          "description": "BFS, DFS, shortest paths, cycle detection, and topological sort.",
-          "lastUpdated": "2025-04-12"
-        },
-        {
-          "id": "dsa-05",
-          "title": "Dynamic Programming Patterns",
-          "type": "md",
-          "difficulty": "Advanced",
-          "tags": ["DP", "memoization", "tabulation"],
-          "path": "resources/dsa/dynamic-programming.md",
-          "description": "Top-down vs bottom-up DP with 20+ classic problems solved.",
-          "lastUpdated": "2025-04-15"
-        },
-        {
-          "id": "dsa-06",
-          "title": "Sorting & Searching",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["sorting", "binary-search", "quicksort", "mergesort"],
-          "path": "resources/dsa/sorting-searching.html",
-          "description": "All major sorting algorithms, binary search variants, and complexity analysis.",
-          "lastUpdated": "2025-04-18"
+          "id": "dsa-dp",
+          "label": "Dynamic Programming",
+          "resources": [
+            {
+              "id": "dsa-05",
+              "title": "Dynamic Programming Patterns",
+              "type": "md",
+              "difficulty": "Advanced",
+              "tags": ["DP", "memoization", "tabulation"],
+              "path": "data/dsa/dynamic-programming.md",
+              "description": "Top-down vs bottom-up DP with 20+ classic problems solved.",
+              "lastUpdated": "2025-04-15"
+            }
+          ]
         }
       ]
     },
@@ -77,56 +101,136 @@
       "icon": "☕",
       "color": "#3b82f6",
       "description": "Core Java concepts, OOP, collections, concurrency and JVM internals.",
-      "resources": [
+      "subcategories": [
         {
-          "id": "java-01",
-          "title": "OOP Concepts & SOLID Principles",
-          "type": "html",
-          "difficulty": "Beginner",
-          "tags": ["OOP", "SOLID", "inheritance", "polymorphism"],
-          "path": "resources/java/oop-solid.html",
-          "description": "Encapsulation, inheritance, polymorphism with real-world SOLID examples.",
-          "lastUpdated": "2025-03-20"
+          "id": "java-oop",
+          "label": "OOP Principles",
+          "resources": [
+            {
+              "id": "java-01",
+              "title": "OOP Concepts & SOLID Principles",
+              "type": "html",
+              "difficulty": "Beginner",
+              "tags": ["OOP", "SOLID", "inheritance"],
+              "path": "data/java/oop-solid.html",
+              "description": "Encapsulation, inheritance, polymorphism with real-world SOLID examples.",
+              "lastUpdated": "2025-03-20"
+            },
+            {
+              "id": "java-06",
+              "title": "Polymorphism & Overloading",
+              "type": "html",
+              "difficulty": "Beginner",
+              "tags": ["polymorphism", "overloading", "overriding"],
+              "path": "data/java/polymorphism.html",
+              "description": "Compile-time vs runtime polymorphism, method overloading and overriding rules.",
+              "lastUpdated": "2025-04-20"
+            },
+            {
+              "id": "java-07",
+              "title": "Java Access Modifiers & Encapsulation",
+              "type": "html",
+              "difficulty": "Beginner",
+              "tags": ["access-modifiers", "encapsulation", "packages"],
+              "path": "data/java/access-modifiers.html",
+              "description": "Public, private, protected, default access with encapsulation best practices.",
+              "lastUpdated": "2025-04-21"
+            }
+          ]
         },
         {
-          "id": "java-02",
-          "title": "Java Collections Framework",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["collections", "HashMap", "ArrayList", "Set"],
-          "path": "resources/java/collections.html",
-          "description": "Internals of ArrayList, LinkedList, HashMap, TreeMap, HashSet and when to use each.",
-          "lastUpdated": "2025-03-25"
+          "id": "java-collections",
+          "label": "Collections & DS",
+          "resources": [
+            {
+              "id": "java-02",
+              "title": "Java Collections Framework",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["collections", "HashMap", "ArrayList"],
+              "path": "data/java/collections.html",
+              "description": "Internals of ArrayList, LinkedList, HashMap, TreeMap, HashSet and when to use each.",
+              "lastUpdated": "2025-03-25"
+            },
+            {
+              "id": "java-08",
+              "title": "HashMap Internals & Collision Handling",
+              "type": "html",
+              "difficulty": "Advanced",
+              "tags": ["HashMap", "hashing", "collision"],
+              "path": "data/java/hashmap-internals.html",
+              "description": "How HashMap works internally: hashing, buckets, treeification, and load factor.",
+              "lastUpdated": "2025-04-22"
+            },
+            {
+              "id": "java-09",
+              "title": "Comparable vs Comparator",
+              "type": "md",
+              "difficulty": "Intermediate",
+              "tags": ["sorting", "Comparable", "Comparator"],
+              "path": "data/java/comparable-comparator.md",
+              "description": "Natural ordering vs custom sorting with practical examples.",
+              "lastUpdated": "2025-04-23"
+            }
+          ]
         },
         {
-          "id": "java-03",
-          "title": "Multithreading & Concurrency",
-          "type": "md",
-          "difficulty": "Advanced",
-          "tags": ["threads", "concurrency", "synchronized", "locks"],
-          "path": "resources/java/concurrency.md",
-          "description": "Thread lifecycle, synchronization, ExecutorService, and concurrent data structures.",
-          "lastUpdated": "2025-04-02"
+          "id": "java-concurrency",
+          "label": "Multithreading & Concurrency",
+          "resources": [
+            {
+              "id": "java-03",
+              "title": "Multithreading & Concurrency",
+              "type": "md",
+              "difficulty": "Advanced",
+              "tags": ["threads", "concurrency", "synchronized"],
+              "path": "data/java/concurrency.md",
+              "description": "Thread lifecycle, synchronization, ExecutorService, and concurrent data structures.",
+              "lastUpdated": "2025-04-02"
+            },
+            {
+              "id": "java-10",
+              "title": "Thread Pool & ExecutorService",
+              "type": "html",
+              "difficulty": "Advanced",
+              "tags": ["ThreadPool", "Executor", "Future"],
+              "path": "data/java/thread-pool.html",
+              "description": "FixedThreadPool, CachedThreadPool, ScheduledExecutor, and CompletableFuture patterns.",
+              "lastUpdated": "2025-04-24"
+            }
+          ]
         },
         {
-          "id": "java-04",
-          "title": "Java 8+ Features",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["streams", "lambda", "Optional", "functional"],
-          "path": "resources/java/java8-features.html",
-          "description": "Lambdas, Stream API, Optional, method references, and CompletableFuture.",
-          "lastUpdated": "2025-04-08"
+          "id": "java-modern",
+          "label": "Java 8+ Features",
+          "resources": [
+            {
+              "id": "java-04",
+              "title": "Java 8+ Features",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["streams", "lambda", "Optional"],
+              "path": "data/java/java8-features.html",
+              "description": "Lambdas, Stream API, Optional, method references, and CompletableFuture.",
+              "lastUpdated": "2025-04-08"
+            }
+          ]
         },
         {
-          "id": "java-05",
-          "title": "JVM Internals & Memory Model",
-          "type": "md",
-          "difficulty": "Advanced",
-          "tags": ["JVM", "GC", "heap", "stack", "classloader"],
-          "path": "resources/java/jvm-internals.md",
-          "description": "Heap, stack, metaspace, garbage collection algorithms, and JIT compilation.",
-          "lastUpdated": "2025-04-11"
+          "id": "java-jvm",
+          "label": "JVM Internals",
+          "resources": [
+            {
+              "id": "java-05",
+              "title": "JVM Internals & Memory Model",
+              "type": "md",
+              "difficulty": "Advanced",
+              "tags": ["JVM", "GC", "heap", "classloader"],
+              "path": "data/java/jvm-internals.md",
+              "description": "Heap, stack, metaspace, garbage collection algorithms, and JIT compilation.",
+              "lastUpdated": "2025-04-11"
+            }
+          ]
         }
       ]
     },
@@ -137,56 +241,80 @@
       "icon": "⚡",
       "color": "#eab308",
       "description": "Modern JS, async patterns, closures, TypeScript, and browser APIs.",
-      "resources": [
+      "subcategories": [
         {
-          "id": "js-01",
-          "title": "Closures & Scope",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["closure", "scope", "hoisting", "IIFE"],
-          "path": "resources/javascript/closures-scope.html",
-          "description": "Lexical scope, closure patterns, hoisting, and the module pattern explained.",
-          "lastUpdated": "2025-03-15"
+          "id": "js-core",
+          "label": "Core Concepts",
+          "resources": [
+            {
+              "id": "js-01",
+              "title": "Closures & Scope",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["closure", "scope", "hoisting"],
+              "path": "data/javascript/closures-scope.html",
+              "description": "Lexical scope, closure patterns, hoisting, and the module pattern explained.",
+              "lastUpdated": "2025-03-15"
+            },
+            {
+              "id": "js-03",
+              "title": "Prototypes & Class Inheritance",
+              "type": "md",
+              "difficulty": "Intermediate",
+              "tags": ["prototype", "class", "inheritance"],
+              "path": "data/javascript/prototypes.md",
+              "description": "Prototype chain, ES6 classes, inheritance patterns, and the 'this' keyword.",
+              "lastUpdated": "2025-04-01"
+            }
+          ]
         },
         {
-          "id": "js-02",
-          "title": "Async JavaScript: Promises & Async/Await",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["async", "promises", "event-loop", "callbacks"],
-          "path": "resources/javascript/async-javascript.html",
-          "description": "Event loop, call stack, promises, async/await, and error handling patterns.",
-          "lastUpdated": "2025-03-22"
+          "id": "js-async",
+          "label": "Async Patterns",
+          "resources": [
+            {
+              "id": "js-02",
+              "title": "Async JavaScript: Promises & Async/Await",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["async", "promises", "event-loop"],
+              "path": "data/javascript/async-javascript.html",
+              "description": "Event loop, call stack, promises, async/await, and error handling patterns.",
+              "lastUpdated": "2025-03-22"
+            }
+          ]
         },
         {
-          "id": "js-03",
-          "title": "Prototypes & Class Inheritance",
-          "type": "md",
-          "difficulty": "Intermediate",
-          "tags": ["prototype", "class", "inheritance", "this"],
-          "path": "resources/javascript/prototypes.md",
-          "description": "Prototype chain, ES6 classes, inheritance patterns, and the 'this' keyword.",
-          "lastUpdated": "2025-04-01"
+          "id": "js-typescript",
+          "label": "TypeScript",
+          "resources": [
+            {
+              "id": "js-04",
+              "title": "TypeScript Essentials",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["TypeScript", "types", "generics"],
+              "path": "data/javascript/typescript.html",
+              "description": "Types, interfaces, generics, enums, utility types, and strict mode.",
+              "lastUpdated": "2025-04-14"
+            }
+          ]
         },
         {
-          "id": "js-04",
-          "title": "TypeScript Essentials",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["TypeScript", "types", "generics", "interfaces"],
-          "path": "resources/javascript/typescript.html",
-          "description": "Types, interfaces, generics, enums, utility types, and strict mode.",
-          "lastUpdated": "2025-04-14"
-        },
-        {
-          "id": "js-05",
-          "title": "Design Patterns in JavaScript",
-          "type": "md",
-          "difficulty": "Advanced",
-          "tags": ["patterns", "observer", "factory", "singleton"],
-          "path": "resources/javascript/design-patterns.md",
-          "description": "Observer, factory, singleton, decorator, and strategy patterns in modern JS.",
-          "lastUpdated": "2025-04-17"
+          "id": "js-patterns",
+          "label": "Design Patterns",
+          "resources": [
+            {
+              "id": "js-05",
+              "title": "Design Patterns in JavaScript",
+              "type": "md",
+              "difficulty": "Advanced",
+              "tags": ["patterns", "observer", "factory"],
+              "path": "data/javascript/design-patterns.md",
+              "description": "Observer, factory, singleton, decorator, and strategy patterns in modern JS.",
+              "lastUpdated": "2025-04-17"
+            }
+          ]
         }
       ]
     },
@@ -197,74 +325,128 @@
       "icon": "🏗️",
       "color": "#8b5cf6",
       "description": "Scalable systems, distributed architecture, databases, and design patterns.",
-      "resources": [
+      "subcategories": [
         {
-          "id": "sd-01",
-          "title": "System Design Fundamentals",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["scalability", "availability", "CAP", "load-balancing"],
-          "path": "resources/system-design/fundamentals.html",
-          "description": "Scalability, availability, reliability, CAP theorem, and load balancing explained.",
-          "lastUpdated": "2025-03-10"
+          "id": "sd-fundamentals",
+          "label": "Fundamentals",
+          "resources": [
+            {
+              "id": "sd-01",
+              "title": "System Design Fundamentals",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["scalability", "availability", "CAP"],
+              "path": "data/system-design/fundamentals.html",
+              "description": "Scalability, availability, reliability, CAP theorem, and load balancing explained.",
+              "lastUpdated": "2025-03-10"
+            },
+            {
+              "id": "sd-02",
+              "title": "Database Design & SQL vs NoSQL",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["database", "SQL", "NoSQL", "sharding"],
+              "path": "data/system-design/database-design.html",
+              "description": "Relational vs NoSQL, indexing strategies, sharding, replication, and ACID properties.",
+              "lastUpdated": "2025-03-18"
+            },
+            {
+              "id": "sd-03",
+              "title": "Caching Strategies",
+              "type": "md",
+              "difficulty": "Intermediate",
+              "tags": ["cache", "Redis", "CDN", "eviction"],
+              "path": "data/system-design/caching.md",
+              "description": "Cache types, eviction policies, Redis patterns, CDN, and cache invalidation.",
+              "lastUpdated": "2025-03-28"
+            }
+          ]
         },
         {
-          "id": "sd-02",
-          "title": "Database Design & SQL vs NoSQL",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["database", "SQL", "NoSQL", "indexing", "sharding"],
-          "path": "resources/system-design/database-design.html",
-          "description": "Relational vs NoSQL, indexing strategies, sharding, replication, and ACID properties.",
-          "lastUpdated": "2025-03-18"
+          "id": "sd-hld",
+          "label": "HLD Case Studies",
+          "resources": [
+            {
+              "id": "sd-04",
+              "title": "Designing URL Shortener",
+              "type": "html",
+              "difficulty": "Intermediate",
+              "tags": ["case-study", "hashing", "redirection"],
+              "path": "data/system-design/url-shortener.html",
+              "description": "End-to-end design of a URL shortener with 100M+ URLs, including API and DB schema.",
+              "lastUpdated": "2025-04-03"
+            },
+            {
+              "id": "sd-05",
+              "title": "Designing Twitter / Social Feed",
+              "type": "html",
+              "difficulty": "Advanced",
+              "tags": ["case-study", "fanout", "timeline"],
+              "path": "data/system-design/twitter-design.html",
+              "description": "News feed generation, fanout on read vs write, media storage, and real-time updates.",
+              "lastUpdated": "2025-04-09"
+            },
+            {
+              "id": "sd-06",
+              "title": "Message Queues & Event-Driven Architecture",
+              "type": "md",
+              "difficulty": "Advanced",
+              "tags": ["kafka", "rabbitmq", "event-driven"],
+              "path": "data/system-design/message-queues.md",
+              "description": "Kafka, RabbitMQ, pub-sub patterns, exactly-once delivery, and event sourcing.",
+              "lastUpdated": "2025-04-16"
+            }
+          ]
         },
         {
-          "id": "sd-03",
-          "title": "Caching Strategies",
-          "type": "md",
-          "difficulty": "Intermediate",
-          "tags": ["cache", "Redis", "CDN", "eviction", "write-through"],
-          "path": "resources/system-design/caching.md",
-          "description": "Cache types, eviction policies, Redis patterns, CDN, and cache invalidation.",
-          "lastUpdated": "2025-03-28"
-        },
-        {
-          "id": "sd-04",
-          "title": "Designing URL Shortener",
-          "type": "html",
-          "difficulty": "Intermediate",
-          "tags": ["case-study", "hashing", "redirection", "analytics"],
-          "path": "resources/system-design/url-shortener.html",
-          "description": "End-to-end design of a URL shortener with 100M+ URLs, including API and DB schema.",
-          "lastUpdated": "2025-04-03"
-        },
-        {
-          "id": "sd-05",
-          "title": "Designing Twitter / Social Feed",
-          "type": "html",
-          "difficulty": "Advanced",
-          "tags": ["case-study", "fanout", "timeline", "real-time"],
-          "path": "resources/system-design/twitter-design.html",
-          "description": "News feed generation, fanout on read vs write, media storage, and real-time updates.",
-          "lastUpdated": "2025-04-09"
-        },
-        {
-          "id": "sd-06",
-          "title": "Message Queues & Event-Driven Architecture",
-          "type": "md",
-          "difficulty": "Advanced",
-          "tags": ["kafka", "rabbitmq", "event-driven", "pub-sub"],
-          "path": "resources/system-design/message-queues.md",
-          "description": "Kafka, RabbitMQ, pub-sub patterns, exactly-once delivery, and event sourcing.",
-          "lastUpdated": "2025-04-16"
+          "id": "sd-lld",
+          "label": "LLD",
+          "subcategories": [
+            {
+              "id": "sd-lld-easy",
+              "label": "Easy",
+              "resources": [
+                {
+                  "id": "lld-01",
+                  "title": "Parking Lot System Design",
+                  "type": "html",
+                  "difficulty": "Beginner",
+                  "tags": ["LLD", "OOP", "design-patterns"],
+                  "path": "data/system-design/lld/easy/parking-lot.html",
+                  "description": "Design a parking lot system with classes, enums, and strategy pattern.",
+                  "lastUpdated": "2025-04-25"
+                },
+                {
+                  "id": "lld-02",
+                  "title": "Library Management System",
+                  "type": "html",
+                  "difficulty": "Beginner",
+                  "tags": ["LLD", "CRUD", "relationships"],
+                  "path": "data/system-design/lld/easy/library-management.html",
+                  "description": "Design a library system with book catalog, member management, and borrowing.",
+                  "lastUpdated": "2025-04-26"
+                },
+                {
+                  "id": "lld-03",
+                  "title": "Tic Tac Toe Game",
+                  "type": "md",
+                  "difficulty": "Beginner",
+                  "tags": ["LLD", "game", "state-machine"],
+                  "path": "data/system-design/lld/easy/tic-tac-toe.md",
+                  "description": "Design a tic-tac-toe game with board state, player turns, and win detection.",
+                  "lastUpdated": "2025-04-27"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
   ],
   "meta": {
-    "totalResources": 21,
-    "lastUpdated": "2025-04-20",
-    "version": "1.0.0",
+    "totalResources": 30,
+    "lastUpdated": "2025-04-27",
+    "version": "2.0.0",
     "author": "Interview Hub"
   }
 }

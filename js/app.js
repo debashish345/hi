@@ -1,308 +1,343 @@
-// ─── State ──────────────────────────────────────────────────────────────────
+// ─── State ──────────────────────────────────────────────────────────────
 const state = {
   data: null,
-  activeCategory: "all",
-  activeFilter: "all",
-  searchQuery: "",
-  view: "grid",
+  activeCategory: 'all',
+  searchQuery: '',
+  completed: JSON.parse(localStorage.getItem('completed-resources') || '{}'),
+  favourites: JSON.parse(localStorage.getItem('favourite-sections') || '{}'),
 };
 
-// ─── Fetch Data ──────────────────────────────────────────────────────────────
+// ─── Fetch Data ─────────────────────────────────────────────────────────
 async function fetchData() {
   try {
-    const res = await fetch('https://raw.githubusercontent.com/debashish345/hi/refs/heads/main/resources.json');
-    const json = await res.json();
-    allData = json.categories;
+    const res = await fetch('resources.json');
+    state.data = await res.json();
   } catch (e) {
-    console.error('Failed to load resources.json', e);
-    allData = [];
-  }
-}
-
-// ─── Init ────────────────────────────────────────────────────────────────────
-function init() {
-  renderSidebar();
-  renderStats();
-  renderContent();
-  bindSearch();
-}
-
-// ─── Sidebar ─────────────────────────────────────────────────────────────────
-function renderSidebar() {
-  const nav = document.getElementById("category-nav");
-  const { categories } = state.data;
-
-  const totalCount = categories.reduce((a, c) => a + c.resources.length, 0);
-
-  const allBtn = createNavItem(
-    "all",
-    "📚",
-    "All Resources",
-    totalCount,
-    "#a78bfa",
-    state.activeCategory === "all"
-  );
-  nav.innerHTML = "";
-  nav.appendChild(allBtn);
-
-  categories.forEach((cat) => {
-    const btn = createNavItem(
-      cat.id,
-      cat.icon,
-      cat.label,
-      cat.resources.length,
-      cat.color,
-      state.activeCategory === cat.id
-    );
-    nav.appendChild(btn);
-  });
-}
-
-function createNavItem(id, icon, label, count, color, active) {
-  const btn = document.createElement("button");
-  btn.className = `nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group ${
-    active ? "active" : "hover:bg-zinc-800/60"
-  }`;
-  btn.dataset.category = id;
-  btn.innerHTML = `
-    <span class="text-xl w-8 flex items-center justify-center">${icon}</span>
-    <span class="flex-1 font-medium text-sm ${active ? "text-white" : "text-zinc-400 group-hover:text-zinc-200"}">${label}</span>
-    <span class="text-xs px-2 py-0.5 rounded-full font-mono font-bold" style="background:${color}22; color:${color}">${count}</span>
-  `;
-  if (active) btn.style.background = `${color}18`;
-  btn.addEventListener("click", () => {
-    state.activeCategory = id;
-    state.activeFilter = "all";
-    renderSidebar();
-    renderContent();
-    renderFilterBar();
-  });
-  return btn;
-}
-
-// ─── Stats ───────────────────────────────────────────────────────────────────
-function renderStats() {
-  const { categories, meta } = state.data;
-  const total = meta.totalResources;
-  const htmlCount = categories.flatMap((c) => c.resources).filter((r) => r.type === "html").length;
-  const mdCount = categories.flatMap((c) => c.resources).filter((r) => r.type === "md").length;
-  const advCount = categories
-    .flatMap((c) => c.resources)
-    .filter((r) => r.difficulty === "Advanced").length;
-
-  document.getElementById("stat-total").textContent = total;
-  document.getElementById("stat-html").textContent = htmlCount;
-  document.getElementById("stat-md").textContent = mdCount;
-  document.getElementById("stat-adv").textContent = advCount;
-}
-
-// ─── Filter Bar ───────────────────────────────────────────────────────────────
-function renderFilterBar() {
-  const bar = document.getElementById("filter-bar");
-  const filters = ["all", "Beginner", "Intermediate", "Advanced"];
-  bar.innerHTML = filters
-    .map(
-      (f) => `
-    <button onclick="setFilter('${f}')" 
-      class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-        state.activeFilter === f
-          ? "bg-violet-500 text-white"
-          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200"
-      }">
-      ${f === "all" ? "All Levels" : f}
-    </button>`
-    )
-    .join("");
-}
-
-function setFilter(f) {
-  state.activeFilter = f;
-  renderFilterBar();
-  renderContent();
-}
-
-// ─── Search ──────────────────────────────────────────────────────────────────
-function bindSearch() {
-  const input = document.getElementById("search-input");
-  input.addEventListener("input", (e) => {
-    state.searchQuery = e.target.value.toLowerCase().trim();
-    renderContent();
-  });
-}
-
-// ─── Get Filtered Resources ───────────────────────────────────────────────────
-function getFilteredResources() {
-  const { categories } = state.data;
-  let resources = [];
-
-  if (state.activeCategory === "all") {
-    resources = categories.flatMap((cat) =>
-      cat.resources.map((r) => ({ ...r, catId: cat.id, catLabel: cat.label, catColor: cat.color, catIcon: cat.icon }))
-    );
-  } else {
-    const cat = categories.find((c) => c.id === state.activeCategory);
-    if (cat) {
-      resources = cat.resources.map((r) => ({
-        ...r,
-        catId: cat.id,
-        catLabel: cat.label,
-        catColor: cat.color,
-        catIcon: cat.icon,
-      }));
+    console.error('Failed to load resources.json — trying GitHub raw', e);
+    try {
+      const res = await fetch('https://raw.githubusercontent.com/debashish345/hi/refs/heads/main/resources.json');
+      state.data = await res.json();
+    } catch (e2) {
+      console.error('Failed to load from GitHub as well', e2);
+      state.data = { categories: [], meta: {} };
     }
   }
-
-  if (state.activeFilter !== "all") {
-    resources = resources.filter((r) => r.difficulty === state.activeFilter);
-  }
-
-  if (state.searchQuery) {
-    resources = resources.filter(
-      (r) =>
-        r.title.toLowerCase().includes(state.searchQuery) ||
-        r.description.toLowerCase().includes(state.searchQuery) ||
-        r.tags.some((t) => t.toLowerCase().includes(state.searchQuery))
-    );
-  }
-
-  return resources;
+  init();
 }
 
-// ─── Render Content ───────────────────────────────────────────────────────────
-function renderContent() {
-  renderFilterBar();
-  const resources = getFilteredResources();
-  const grid = document.getElementById("resource-grid");
-  const emptyState = document.getElementById("empty-state");
-  const countEl = document.getElementById("result-count");
+// ─── Init ───────────────────────────────────────────────────────────────
+function init() {
+  renderCategoryTabs();
+  renderContent();
+  bindSearch();
+  bindHeaderTabs();
+  bindClearFilters();
+}
 
-  countEl.textContent = `${resources.length} resource${resources.length !== 1 ? "s" : ""}`;
+// ─── Category Tabs ──────────────────────────────────────────────────────
+function renderCategoryTabs() {
+  const container = document.querySelector('.tabs-inner');
+  const { categories } = state.data;
 
-  if (resources.length === 0) {
-    grid.classList.add("hidden");
-    emptyState.classList.remove("hidden");
-    return;
-  }
+  let html = `<button class="cat-tab ${state.activeCategory === 'all' ? 'active' : ''}" data-cat="all">All</button>`;
 
-  grid.classList.remove("hidden");
-  emptyState.classList.add("hidden");
-  grid.innerHTML = resources.map((r) => renderCard(r)).join("");
+  categories.forEach(cat => {
+    html += `<button class="cat-tab ${state.activeCategory === cat.id ? 'active' : ''}" data-cat="${cat.id}">${cat.icon} ${cat.label}</button>`;
+  });
 
-  // Animate cards in
-  requestAnimationFrame(() => {
-    document.querySelectorAll(".resource-card").forEach((card, i) => {
-      card.style.animationDelay = `${i * 40}ms`;
-      card.classList.add("card-enter");
+  container.innerHTML = html;
+
+  container.querySelectorAll('.cat-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activeCategory = btn.dataset.cat;
+      renderCategoryTabs();
+      renderContent();
     });
   });
 }
 
-// ─── Difficulty Badge ─────────────────────────────────────────────────────────
-const difficultyConfig = {
-  Beginner: { bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
-  Intermediate: { bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
-  Advanced: { bg: "bg-red-500/15", text: "text-red-400", dot: "bg-red-400" },
-};
+// ─── Flatten All Resources ──────────────────────────────────────────────
+function flattenResources(subcategories, catMeta) {
+  const results = [];
+  if (!subcategories) return results;
 
-// ─── Render Card ──────────────────────────────────────────────────────────────
+  subcategories.forEach(sub => {
+    if (sub.resources) {
+      sub.resources.forEach(r => {
+        results.push({
+          ...r,
+          subLabel: sub.label,
+          subId: sub.id,
+          ...catMeta,
+        });
+      });
+    }
+    if (sub.subcategories) {
+      sub.subcategories.forEach(nested => {
+        if (nested.resources) {
+          nested.resources.forEach(r => {
+            results.push({
+              ...r,
+              subLabel: `${sub.label} › ${nested.label}`,
+              subId: nested.id,
+              ...catMeta,
+            });
+          });
+        }
+      });
+    }
+  });
+
+  return results;
+}
+
+// ─── Get Sections for Rendering ─────────────────────────────────────────
+function getSections() {
+  const { categories } = state.data;
+  const sections = [];
+
+  const catsToShow = state.activeCategory === 'all'
+    ? categories
+    : categories.filter(c => c.id === state.activeCategory);
+
+  catsToShow.forEach(cat => {
+    const catMeta = { catId: cat.id, catLabel: cat.label, catColor: cat.color, catIcon: cat.icon };
+
+    if (cat.subcategories) {
+      cat.subcategories.forEach(sub => {
+        if (sub.resources && sub.resources.length > 0) {
+          const resources = sub.resources.map(r => ({ ...r, ...catMeta, subLabel: sub.label, subId: sub.id }));
+          const filtered = filterResources(resources);
+          if (filtered.length > 0) {
+            sections.push({
+              id: sub.id,
+              label: sub.label,
+              icon: cat.icon,
+              color: cat.color,
+              catLabel: cat.label,
+              resources: filtered,
+            });
+          }
+        }
+
+        // Nested subcategories (e.g., LLD > Easy)
+        if (sub.subcategories) {
+          sub.subcategories.forEach(nested => {
+            if (nested.resources && nested.resources.length > 0) {
+              const resources = nested.resources.map(r => ({
+                ...r, ...catMeta,
+                subLabel: `${sub.label} › ${nested.label}`,
+                subId: nested.id,
+              }));
+              const filtered = filterResources(resources);
+              if (filtered.length > 0) {
+                sections.push({
+                  id: nested.id,
+                  label: `${sub.label} › ${nested.label}`,
+                  icon: cat.icon,
+                  color: cat.color,
+                  catLabel: cat.label,
+                  resources: filtered,
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+  });
+
+  return sections;
+}
+
+// ─── Filter ─────────────────────────────────────────────────────────────
+function filterResources(resources) {
+  if (!state.searchQuery) return resources;
+
+  return resources.filter(r =>
+    r.title.toLowerCase().includes(state.searchQuery) ||
+    r.description.toLowerCase().includes(state.searchQuery) ||
+    r.tags.some(t => t.toLowerCase().includes(state.searchQuery))
+  );
+}
+
+// ─── Render Content ─────────────────────────────────────────────────────
+function renderContent() {
+  const main = document.getElementById('main-content');
+  const emptyState = document.getElementById('empty-state');
+  const sections = getSections();
+
+  if (sections.length === 0) {
+    main.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+
+  emptyState.classList.add('hidden');
+
+  main.innerHTML = sections.map(section => `
+    <div class="section" id="section-${section.id}">
+      <div class="section-header">
+        <div class="section-left">
+          <span class="section-icon">${section.icon}</span>
+          <span class="section-title">${section.label}</span>
+          <span class="section-count">${section.resources.length} resource${section.resources.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="section-right">
+          <button class="section-fav" data-section="${section.id}" onclick="toggleFavourite('${section.id}')">
+            ${state.favourites[section.id] ? '★ Favourited' : 'Favourites'}
+          </button>
+        </div>
+      </div>
+      <div class="card-grid">
+        ${section.resources.map(r => renderCard(r)).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── Render Card ────────────────────────────────────────────────────────
 function renderCard(r) {
-  const diff = difficultyConfig[r.difficulty] || difficultyConfig["Beginner"];
-  const typeIcon = r.type === "html" ? "🌐" : "📝";
-  const typeBadge = r.type === "html" ? "HTML" : "Markdown";
-  const tags = r.tags
-    .slice(0, 3)
-    .map(
-      (t) =>
-        `<span class="tag px-2 py-0.5 rounded-md text-xs font-mono" style="background:${r.catColor}15; color:${r.catColor}cc">#${t}</span>`
-    )
-    .join("");
+  const isChecked = state.completed[r.id] || false;
+  const tagClass = `tag-${r.catId || 'default'}`;
+  const diffClass = `tag-${r.difficulty.toLowerCase()}`;
+
+  const tags = r.tags.slice(0, 3).map(t =>
+    `<span class="card-tag ${tagClass}">${t}</span>`
+  ).join('');
 
   return `
-    <div class="resource-card group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex flex-col gap-4 
-                hover:border-zinc-600 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 cursor-pointer"
-         style="--cat-color: ${r.catColor}"
-         onclick="openResource('${r.path}', '${r.type}', '${r.title}')">
-      
-      <!-- Top glow accent -->
-      <div class="absolute inset-x-0 top-0 h-px rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-           style="background: linear-gradient(90deg, transparent, ${r.catColor}80, transparent)"></div>
-
-      <!-- Header -->
-      <div class="flex items-start justify-between gap-3">
-        <div class="flex items-center gap-2">
-          <span class="text-2xl">${r.catIcon}</span>
-          <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-400">${r.catLabel}</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <span class="${diff.bg} ${diff.text} text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full ${diff.dot}"></span>
-            ${r.difficulty}
-          </span>
-        </div>
-      </div>
-
-      <!-- Title -->
-      <div>
-        <h3 class="font-bold text-white text-base leading-snug group-hover:text-violet-300 transition-colors duration-200">${r.title}</h3>
-        <p class="text-zinc-500 text-sm mt-1.5 leading-relaxed line-clamp-2">${r.description}</p>
-      </div>
-
-      <!-- Tags -->
-      <div class="flex flex-wrap gap-1.5">${tags}</div>
-
-      <!-- Footer -->
-      <div class="flex items-center justify-between mt-auto pt-3 border-t border-zinc-800">
-        <div class="flex items-center gap-1.5 text-xs text-zinc-600">
-          <span>${typeIcon}</span>
-          <span class="font-mono">${typeBadge}</span>
-          <span class="mx-1 opacity-40">·</span>
-          <span>${formatDate(r.lastUpdated)}</span>
-        </div>
-        <button class="flex items-center gap-1 text-xs font-semibold text-zinc-500 group-hover:text-violet-400 transition-colors duration-200">
-          Open <span class="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
+    <div class="resource-card" onclick="openResource('${r.path}', '${r.type}', '${r.title}')">
+      <div class="card-top">
+        <span class="card-title">${r.title}</span>
+        <button class="card-check ${isChecked ? 'checked' : ''}" onclick="event.stopPropagation(); toggleComplete('${r.id}', this)" title="Mark as completed">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
         </button>
+      </div>
+      <p class="card-desc">${r.description}</p>
+      <div class="card-tags">
+        ${tags}
+        <span class="card-tag ${diffClass}">${r.difficulty}</span>
       </div>
     </div>
   `;
 }
 
-// ─── Open Resource ─────────────────────────────────────────────────────────────
-function openResource(path, type, title) {
-  // Opens the resource in a new tab
-  window.open(path, "_blank");
-}
+// ─── Toggle Complete ────────────────────────────────────────────────────
+function toggleComplete(id, btn) {
+  state.completed[id] = !state.completed[id];
+  localStorage.setItem('completed-resources', JSON.stringify(state.completed));
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function formatDate(dateStr) {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-}
-
-// ─── View Toggle ──────────────────────────────────────────────────────────────
-function setView(v) {
-  state.view = v;
-  const grid = document.getElementById("resource-grid");
-  const btnGrid = document.getElementById("btn-grid");
-  const btnList = document.getElementById("btn-list");
-
-  if (v === "grid") {
-    grid.className = "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4";
-    btnGrid.classList.add("active-view");
-    btnList.classList.remove("active-view");
+  if (state.completed[id]) {
+    btn.classList.add('checked');
   } else {
-    grid.className = "grid grid-cols-1 gap-3";
-    btnGrid.classList.remove("active-view");
-    btnList.classList.add("active-view");
+    btn.classList.remove('checked');
   }
 }
 
-// ─── Sidebar Toggle (mobile) ──────────────────────────────────────────────────
-function toggleSidebar() {
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("sidebar-overlay");
-  sidebar.classList.toggle("-translate-x-full");
-  overlay.classList.toggle("hidden");
+// ─── Toggle Favourite ───────────────────────────────────────────────────
+function toggleFavourite(sectionId) {
+  state.favourites[sectionId] = !state.favourites[sectionId];
+  localStorage.setItem('favourite-sections', JSON.stringify(state.favourites));
+  renderContent();
 }
 
-// ─── Start ───────────────────────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", fetchData);
+// ─── Open Resource ──────────────────────────────────────────────────────
+function openResource(path, type, title) {
+  window.open(path, '_blank');
+}
+
+// ─── Search ─────────────────────────────────────────────────────────────
+function bindSearch() {
+  const input = document.getElementById('search-input');
+  let debounceTimer;
+
+  input.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      state.searchQuery = e.target.value.toLowerCase().trim();
+      renderContent();
+    }, 200);
+  });
+}
+
+// ─── Header Tabs (All Items / For You) ──────────────────────────────────
+function bindHeaderTabs() {
+  document.querySelectorAll('.header-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.header-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      if (tab.dataset.tab === 'for-you') {
+        // Show only favourited sections or completed items
+        state.showForYou = true;
+        renderForYou();
+      } else {
+        state.showForYou = false;
+        renderContent();
+      }
+    });
+  });
+}
+
+// ─── For You View ───────────────────────────────────────────────────────
+function renderForYou() {
+  const main = document.getElementById('main-content');
+  const emptyState = document.getElementById('empty-state');
+  const sections = getSections();
+
+  // Filter to only favourited sections or sections with completed items
+  const favSections = sections.filter(s =>
+    state.favourites[s.id] ||
+    s.resources.some(r => state.completed[r.id])
+  );
+
+  if (favSections.length === 0) {
+    main.innerHTML = '';
+    emptyState.querySelector('h3').textContent = 'No favourites yet';
+    emptyState.querySelector('p').textContent = 'Star sections or check off resources to see them here';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+
+  emptyState.classList.add('hidden');
+
+  main.innerHTML = favSections.map(section => `
+    <div class="section" id="section-${section.id}">
+      <div class="section-header">
+        <div class="section-left">
+          <span class="section-icon">${section.icon}</span>
+          <span class="section-title">${section.label}</span>
+          <span class="section-count">${section.resources.length} resource${section.resources.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="section-right">
+          <button class="section-fav" onclick="toggleFavourite('${section.id}')">
+            ${state.favourites[section.id] ? '★ Favourited' : 'Favourites'}
+          </button>
+        </div>
+      </div>
+      <div class="card-grid">
+        ${section.resources.map(r => renderCard(r)).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── Clear Filters ──────────────────────────────────────────────────────
+function bindClearFilters() {
+  const btn = document.getElementById('clear-filters-btn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      state.searchQuery = '';
+      state.activeCategory = 'all';
+      document.getElementById('search-input').value = '';
+      renderCategoryTabs();
+      renderContent();
+    });
+  }
+}
+
+// ─── Start ──────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', fetchData);
