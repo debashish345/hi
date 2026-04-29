@@ -28,7 +28,7 @@ let progress = loadProgress();
 // ─── Fetch Data ──────────────────────────────
 async function fetchData() {
   try {
-    const res = await fetch('data/resources.json');
+    const res = await fetch('https://raw.githubusercontent.com/debashish345/hi/refs/heads/main/resources.json');
     const json = await res.json();
     allData = json.categories;
   } catch (e) {
