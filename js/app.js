@@ -10,17 +10,12 @@ const state = {
 // ─── Fetch Data ──────────────────────────────────────────────────────────────
 async function fetchData() {
   try {
-    const res = await fetch("data/resources.json");
-    if (!res.ok) throw new Error("Failed to fetch");
-    state.data = await res.json();
-    init();
-  } catch (err) {
-    document.getElementById("app").innerHTML = `
-      <div class="flex flex-col items-center justify-center h-64 gap-4">
-        <span class="text-5xl">⚠️</span>
-        <p class="text-red-400 font-mono">Failed to load resources.json</p>
-        <p class="text-zinc-500 text-sm">Make sure you're running via a local server (e.g. Live Server)</p>
-      </div>`;
+    const res = await fetch('https://raw.githubusercontent.com/debashish345/hi/refs/heads/main/resources.json');
+    const json = await res.json();
+    allData = json.categories;
+  } catch (e) {
+    console.error('Failed to load resources.json', e);
+    allData = [];
   }
 }
 
