@@ -207,7 +207,7 @@ function renderCard(r) {
   ).join('');
 
   return `
-    <div class="resource-card" onclick="openResource('${r.path}', '${r.type}', '${r.title}')">
+    <div class="resource-card" onclick="openResource('${r.path}', '${r.type}', '${r.title}', '${r.id}')">
       <div class="card-top">
         <span class="card-title">${r.title}</span>
         <button class="card-check ${isChecked ? 'checked' : ''}" onclick="event.stopPropagation(); toggleComplete('${r.id}', this)" title="Mark as completed">
@@ -245,8 +245,12 @@ function toggleFavourite(sectionId) {
 }
 
 // ─── Open Resource ──────────────────────────────────────────────────────
-function openResource(path, type, title) {
-  window.open(path, '_blank');
+function openResource(path, type, title, id) {
+  if (type === 'lld') {
+    window.open(`lld.html#${id}`, '_blank');
+  } else {
+    window.open(path, '_blank');
+  }
 }
 
 // ─── Search ─────────────────────────────────────────────────────────────

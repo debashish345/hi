@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLD Viewer — Interview Resources</title>
+  <meta name="description" content="Interactive Low-Level Design viewer with code editor, class diagrams, and walkthroughs." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/lld-viewer.css" />
+</head>
+<body>
+
+  <!-- Loading State -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loader-spinner"></div>
+    <p>Loading LLD Problem...</p>
+  </div>
+
+  <!-- Error State -->
+  <div id="error-screen" class="error-screen hidden">
+    <span class="error-icon">⚠️</span>
+    <h2>Problem Not Found</h2>
+    <p id="error-msg">The requested LLD problem could not be loaded.</p>
+    <a href="index.html" class="btn-back">← Back to Hub</a>
+  </div>
+
+  <!-- Main Content (hidden until loaded) -->
+  <div id="lld-page" class="lld-page hidden">
+
+    <!-- Back Link -->
+    <a href="index.html" class="back-link" id="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back to Hub
+    </a>
+
+    <!-- ① Question -->
+    <header class="lld-header" id="lld-header">
+      <h1 id="lld-title" class="lld-title"></h1>
+      <div id="lld-question" class="lld-question"></div>
+    </header>
+
+    <!-- ② Tags & Difficulty -->
+    <div id="lld-badges" class="badge-row"></div>
+
+    <!-- ③ Class Diagram (Mermaid) -->
+    <section class="content-section" id="diagram-section">
+      <h2 class="section-heading"><span class="heading-bar"></span> Entity Class Design</h2>
+      <div id="mermaid-container" class="mermaid-container"></div>
+    </section>
+
+    <!-- ④ Code Editor (File tree + Monaco) -->
+    <section class="content-section" id="code-section">
+      <h2 class="section-heading"><span class="heading-bar"></span> Implementation Code</h2>
+      <p class="section-desc">Browse the full source code. Click any file in the tree to view it. Supports syntax highlighting, folding, and search (<kbd>Ctrl+F</kbd>).</p>
+      <div class="editor-split" id="editor-split">
+        <!-- Left: File Tree -->
+        <div class="file-tree-panel" id="file-tree-panel">
+          <div class="file-tree-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span id="tree-repo-name">Project Files</span>
+          </div>
+          <div id="file-tree" class="file-tree"></div>
+        </div>
+        <!-- Right: Monaco Editor -->
+        <div class="editor-panel">
+          <div class="editor-toolbar" id="editor-toolbar">
+            <div class="editor-file-path" id="editor-file-path">
+              <span class="path-icon">📄</span>
+              <span id="active-file-name">Select a file</span>
+            </div>
+            <div class="editor-actions">
+              <button class="action-btn" id="copy-btn" title="Copy code">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Copy</span>
+              </button>
+              <button class="action-btn" id="fullscreen-btn" title="Toggle fullscreen">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="monaco-editor" class="monaco-wrapper"></div>
+          <div class="editor-statusbar">
+            <span id="status-lang">—</span>
+            <span id="status-lines">Lines: —</span>
+            <span id="status-cursor">Ln 1, Col 1</span>
+          </div>
+        </div>
+      </div>
+      <div id="code-loading" class="code-loading hidden">
+        <div class="loader-spinner small"></div>
+        <span>Fetching code from GitHub...</span>
+      </div>
+    </section>
+
+    <!-- ⑤ Code Walkthrough -->
+    <section class="content-section" id="walkthrough-section">
+      <h2 class="section-heading"><span class="heading-bar"></span> Code Walkthrough</h2>
+      <div id="walkthrough-list" class="walkthrough-list"></div>
+    </section>
+
+    <!-- ⑥ Follow-up Questions -->
+    <section class="content-section" id="followup-section">
+      <h2 class="section-heading"><span class="heading-bar"></span> Follow-up Questions</h2>
+      <div id="followup-list" class="followup-list"></div>
+    </section>
+
+  </div>
+
+  <!-- CDN Dependencies: Mermaid MUST load before Monaco's AMD loader to avoid conflict -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+  <script src="js/lld-viewer.js"></script>
+</body>
+</html>

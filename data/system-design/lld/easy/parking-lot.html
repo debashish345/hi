@@ -1,26 +1,174 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parking Lot System Design</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    body { font-family: 'Inter', sans-serif; background: #f8f9fa; color: #212529; margin: 0; }
-    .container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
-    .back { display: inline-flex; align-items: center; gap: 6px; color: #868e96; text-decoration: none; font-size: 13px; margin-bottom: 24px; }
-    .back:hover { color: #228be6; }
-    h1 { font-size: 28px; font-weight: 800; margin: 12px 0 8px; }
-    p { color: #495057; line-height: 1.7; }
-    .wip { text-align: center; padding: 60px 24px; color: #868e96; }
-    .wip span { font-size: 48px; display: block; margin-bottom: 12px; }
-  </style>
+  <title>Parking Lot — Low Level Design</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../../../css/lld-viewer.css" />
 </head>
 <body>
-  <div class="container">
-    <a href="../../index.html" class="back">u2190 Back to Hub</a>
-    <h1>Parking Lot System Design</h1>
-    <div class="wip"><span>u{1f6a7}</span><p>Content coming soon. This is a placeholder page.</p></div>
+  <div class="page-wrapper">
+
+    <!-- Back Link -->
+    <a href="../../../../index.html" class="back-link" id="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back to Hub
+    </a>
+
+    <!-- Header -->
+    <header class="lld-header" id="lld-header">
+      <div class="header-badges">
+        <span class="badge badge-purple">🏗️ System Design</span>
+        <span class="badge badge-green">LLD</span>
+        <span class="badge badge-blue">Beginner</span>
+      </div>
+      <h1 class="lld-title">Parking Lot System Design</h1>
+      <p class="lld-subtitle">Design a parking lot system with classes, enums, strategy pattern, and clean OOP architecture.</p>
+      <div class="tag-row">
+        <span class="tag">#LLD</span>
+        <span class="tag">#OOP</span>
+        <span class="tag">#design-patterns</span>
+        <span class="tag">#strategy-pattern</span>
+        <span class="tag">#Java</span>
+      </div>
+    </header>
+
+    <!-- Problem Statement -->
+    <section class="content-section" id="problem-section">
+      <h2 class="section-heading"><span class="heading-bar"></span>Problem Statement</h2>
+      <div class="info-card">
+        <p>Design a <strong>Parking Lot System</strong> that supports:</p>
+        <ul>
+          <li>Multiple floors with different spot types (Compact, Large, Handicapped)</li>
+          <li>Vehicle types: Car, Truck, Motorcycle</li>
+          <li>Automated ticket generation on entry</li>
+          <li>Hourly rate-based payment calculation</li>
+          <li>Real-time spot availability tracking</li>
+          <li>Multiple entry/exit points</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Class Diagram -->
+    <section class="content-section" id="diagram-section">
+      <h2 class="section-heading"><span class="heading-bar"></span>Key Classes</h2>
+      <div class="class-grid">
+        <div class="class-card">
+          <div class="class-card-header">📦 ParkingLot</div>
+          <div class="class-card-body">
+            <code>- floors: List&lt;ParkingFloor&gt;</code>
+            <code>- entrances: List&lt;Gate&gt;</code>
+            <code>+ parkVehicle(Vehicle): Ticket</code>
+            <code>+ unparkVehicle(Ticket): Payment</code>
+          </div>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">🅿️ ParkingSpot</div>
+          <div class="class-card-body">
+            <code>- spotId: String</code>
+            <code>- type: SpotType</code>
+            <code>- isAvailable: boolean</code>
+            <code>+ assignVehicle(Vehicle): void</code>
+          </div>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">🚗 Vehicle</div>
+          <div class="class-card-body">
+            <code>- licensePlate: String</code>
+            <code>- type: VehicleType</code>
+            <code># Abstract class</code>
+            <code>+ Car, Truck, Motorcycle</code>
+          </div>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">🎫 Ticket</div>
+          <div class="class-card-body">
+            <code>- ticketId: String</code>
+            <code>- entryTime: LocalDateTime</code>
+            <code>- spot: ParkingSpot</code>
+            <code>+ calculateDuration(): long</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Monaco Editor Section -->
+    <section class="content-section" id="code-section">
+      <h2 class="section-heading"><span class="heading-bar"></span>Implementation Code</h2>
+      <p class="section-desc">Explore the full Java implementation below. The editor supports syntax highlighting, code folding, and search (<kbd>Ctrl+F</kbd>).</p>
+
+      <!-- File Tabs -->
+      <div class="editor-container" id="editor-container">
+        <div class="editor-toolbar">
+          <div class="file-tabs" id="file-tabs">
+            <button class="file-tab active" data-file="enums">
+              <span class="file-icon">📄</span> Enums.java
+            </button>
+            <button class="file-tab" data-file="vehicle">
+              <span class="file-icon">📄</span> Vehicle.java
+            </button>
+            <button class="file-tab" data-file="parkingspot">
+              <span class="file-icon">📄</span> ParkingSpot.java
+            </button>
+            <button class="file-tab" data-file="ticket">
+              <span class="file-icon">📄</span> Ticket.java
+            </button>
+            <button class="file-tab" data-file="parkinglot">
+              <span class="file-icon">📄</span> ParkingLot.java
+            </button>
+          </div>
+          <div class="editor-actions">
+            <button class="action-btn" id="copy-btn" title="Copy code">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy</span>
+            </button>
+            <button class="action-btn" id="fullscreen-btn" title="Toggle fullscreen">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="monaco-editor" class="monaco-wrapper"></div>
+        <div class="editor-statusbar">
+          <span id="status-lang">Java</span>
+          <span id="status-lines">Lines: --</span>
+          <span id="status-cursor">Ln 1, Col 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Design Decisions -->
+    <section class="content-section" id="decisions-section">
+      <h2 class="section-heading"><span class="heading-bar"></span>Design Decisions</h2>
+      <div class="decision-list">
+        <div class="decision-item">
+          <div class="decision-num">01</div>
+          <div>
+            <h4>Singleton Pattern for ParkingLot</h4>
+            <p>Only one instance of the parking lot should exist. Thread-safe lazy initialization ensures safety in concurrent environments.</p>
+          </div>
+        </div>
+        <div class="decision-item">
+          <div class="decision-num">02</div>
+          <div>
+            <h4>Strategy Pattern for Pricing</h4>
+            <p>Different vehicle types can have different pricing strategies, making it easy to add new pricing models without modifying existing code.</p>
+          </div>
+        </div>
+        <div class="decision-item">
+          <div class="decision-num">03</div>
+          <div>
+            <h4>Enum for Vehicle & Spot Types</h4>
+            <p>Using enums ensures type safety and prevents invalid states. Each vehicle type maps to compatible spot types.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
+
+  <!-- Monaco Editor CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+  <script src="../../../../js/lld-viewer.js"></script>
 </body>
 </html>

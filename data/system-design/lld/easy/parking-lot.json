@@ -1,0 +1,56 @@
+{
+  "question": "Design a <strong>Parking Lot System</strong> that supports multiple floors, different vehicle types (Car, Truck, Motorcycle), multiple spot types (Compact, Large, Handicapped, Electric), automated ticket generation, hourly-rate payment, and real-time spot tracking.",
+  "mermaid": "classDiagram\n    class ParkingLot {\n        -floors : List\n        -activeTickets : Map\n        -pricingStrategy : PricingStrategy\n        +getInstance() ParkingLot\n        +parkVehicle(Vehicle) Ticket\n        +unparkVehicle(String) Payment\n        +getAvailability() Map\n    }\n    class ParkingFloor {\n        -floorNumber : int\n        -spots : List\n        +findAvailableSpot(Vehicle) ParkingSpot\n        +getAvailableCount(SpotType) int\n    }\n    class ParkingSpot {\n        -spotId : String\n        -type : SpotType\n        -isAvailable : boolean\n        -currentVehicle : Vehicle\n        +assignVehicle(Vehicle) void\n        +removeVehicle() Vehicle\n    }\n    class Vehicle {\n        -licensePlate : String\n        -type : VehicleType\n        -color : String\n        +canFitInSpot(SpotType) boolean\n    }\n    class Car {\n        +canFitInSpot(SpotType) boolean\n    }\n    class Truck {\n        +canFitInSpot(SpotType) boolean\n    }\n    class Motorcycle {\n        +canFitInSpot(SpotType) boolean\n    }\n    class Ticket {\n        -ticketId : String\n        -vehicle : Vehicle\n        -spot : ParkingSpot\n        -entryTime : LocalDateTime\n        +calculateDurationHours() long\n        +markExit() void\n        +markPaid() void\n    }\n    class Payment {\n        -ticket : Ticket\n        -amount : double\n        -method : PaymentMethod\n    }\n    class PricingStrategy {\n        +calculatePrice(Ticket) double\n    }\n    class HourlyPricingStrategy {\n        -hourlyRates : Map\n        +calculatePrice(Ticket) double\n    }\n    ParkingLot *-- ParkingFloor\n    ParkingFloor *-- ParkingSpot\n    ParkingSpot o-- Vehicle\n    Vehicle <|-- Car\n    Vehicle <|-- Truck\n    Vehicle <|-- Motorcycle\n    ParkingLot --> PricingStrategy\n    PricingStrategy <|.. HourlyPricingStrategy\n    Ticket --> ParkingSpot\n    Ticket --> Vehicle\n    Payment --> Ticket",
+  "walkthrough": [
+    {
+      "title": "Define Enums for Type Safety",
+      "description": "Start by creating enums for <code>VehicleType</code>, <code>SpotType</code>, <code>TicketStatus</code>, and <code>PaymentMethod</code>. Enums prevent invalid states and make the code self-documenting."
+    },
+    {
+      "title": "Abstract Vehicle Class with Spot Compatibility",
+      "description": "Create an abstract <code>Vehicle</code> base class with a <code>canFitInSpot(SpotType)</code> method. Each subclass (Car, Truck, Motorcycle) defines which spot types it can occupy — this is the <strong>Template Method</strong> pattern."
+    },
+    {
+      "title": "ParkingSpot with Thread-Safe Operations",
+      "description": "<code>assignVehicle()</code> and <code>removeVehicle()</code> are <code>synchronized</code> to handle concurrent access. The spot validates vehicle compatibility before assignment."
+    },
+    {
+      "title": "ParkingFloor with Spot Search",
+      "description": "Each floor maintains a list of spots. <code>findAvailableSpot()</code> uses Java Streams to find the first available compatible spot — can be optimized with a priority queue for large lots."
+    },
+    {
+      "title": "Ticket Generation with UUID",
+      "description": "Tickets are auto-generated with a unique ID (<code>TKT-XXXXXXXX</code>) using <code>UUID.randomUUID()</code>. Duration is calculated by rounding up to the nearest hour."
+    },
+    {
+      "title": "Strategy Pattern for Pricing",
+      "description": "The <code>PricingStrategy</code> interface allows pluggable pricing models. <code>HourlyPricingStrategy</code> maps each vehicle type to an hourly rate — adding weekend/surge pricing requires zero changes to <code>ParkingLot</code>."
+    },
+    {
+      "title": "Singleton ParkingLot with Double-Check Locking",
+      "description": "The <code>ParkingLot</code> class uses the double-checked locking singleton pattern with <code>volatile</code> keyword for thread safety. It orchestrates the full park/unpark flow."
+    }
+  ],
+  "followUpQuestions": [
+    {
+      "question": "How would you handle electric vehicle charging spots?",
+      "answer": "Add an <code>ELECTRIC</code> SpotType and a <code>ChargingSession</code> class that tracks kWh consumed. The <code>PricingStrategy</code> can be extended to include charging costs. The <code>ParkingSpot</code> gets a <code>hasCharger</code> flag and optionally a <code>ChargingStation</code> reference."
+    },
+    {
+      "question": "How do you handle concurrent entry at multiple gates?",
+      "answer": "The <code>parkVehicle()</code> method is <code>synchronized</code> on the ParkingLot instance. For higher throughput, use a <code>ReentrantLock</code> per floor or a <code>ConcurrentLinkedQueue</code> of available spots per type, allowing lock-free spot allocation."
+    },
+    {
+      "question": "How would you add surge pricing during peak hours?",
+      "answer": "Create a new <code>SurgePricingStrategy</code> that implements <code>PricingStrategy</code>. It checks the current time and applies a multiplier during peak hours. Use the <strong>Decorator Pattern</strong> to wrap the base <code>HourlyPricingStrategy</code> with surge logic."
+    },
+    {
+      "question": "What if the parking lot needs to support reservations?",
+      "answer": "Add a <code>Reservation</code> class with <code>startTime</code>, <code>endTime</code>, and <code>spotId</code>. Modify <code>findAvailableSpot()</code> to exclude reserved spots for the requested time window. Use a <code>ScheduledExecutorService</code> to auto-release expired reservations."
+    },
+    {
+      "question": "How would you persist the data?",
+      "answer": "Use a relational database with tables: <code>parking_spots</code>, <code>vehicles</code>, <code>tickets</code>, <code>payments</code>. The ParkingLot singleton becomes a service layer that delegates to a <code>ParkingRepository</code> (DAO pattern). Use connection pooling (HikariCP) for performance."
+    }
+  ]
+}

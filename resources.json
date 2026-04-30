@@ -409,30 +409,36 @@
                 {
                   "id": "lld-01",
                   "title": "Parking Lot System Design",
-                  "type": "html",
+                  "type": "lld",
                   "difficulty": "Beginner",
                   "tags": ["LLD", "OOP", "design-patterns"],
-                  "path": "data/system-design/lld/easy/parking-lot.html",
+                  "path": "lld.html?id=lld-01",
+                  "contentPath": "data/system-design/lld/easy/parking-lot.json",
+                  "github": "debashish345/parking-lot-lld",
                   "description": "Design a parking lot system with classes, enums, and strategy pattern.",
                   "lastUpdated": "2025-04-25"
                 },
                 {
                   "id": "lld-02",
                   "title": "Library Management System",
-                  "type": "html",
+                  "type": "lld",
                   "difficulty": "Beginner",
                   "tags": ["LLD", "CRUD", "relationships"],
-                  "path": "data/system-design/lld/easy/library-management.html",
+                  "path": "lld.html?id=lld-02",
+                  "contentPath": "data/system-design/lld/easy/library-management.json",
+                  "github": "",
                   "description": "Design a library system with book catalog, member management, and borrowing.",
                   "lastUpdated": "2025-04-26"
                 },
                 {
                   "id": "lld-03",
                   "title": "Tic Tac Toe Game",
-                  "type": "md",
+                  "type": "lld",
                   "difficulty": "Beginner",
                   "tags": ["LLD", "game", "state-machine"],
-                  "path": "data/system-design/lld/easy/tic-tac-toe.md",
+                  "path": "lld.html?id=lld-03",
+                  "contentPath": "data/system-design/lld/easy/tic-tac-toe.json",
+                  "github": "",
                   "description": "Design a tic-tac-toe game with board state, player turns, and win detection.",
                   "lastUpdated": "2025-04-27"
                 }
