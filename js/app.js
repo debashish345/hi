@@ -347,11 +347,100 @@ async function renderResourceView(resource) {
       
       frame.innerHTML = '';
       frame.appendChild(content);
+
+      // Initialize the Mini Tree
+      if (typeof window.initMiniTree === 'function') {
+        window.initMiniTree(frame);
+      }
     } catch (e) {
       frame.innerHTML = `<div class="error-screen"><p>Failed to load content.</p></div>`;
     }
   }
 }
+
+// ─── Mini Tree Navigation (Table of Contents) ───────────────────────────
+window.initMiniTree = function(container) {
+  const headings = Array.from(container.querySelectorAll('h2, h3'));
+  if (headings.length === 0) return;
+
+  // Create container layout
+  const wrapper = document.createElement('div');
+  wrapper.className = 'article-layout';
+  
+  const contentCol = document.createElement('div');
+  contentCol.className = 'article-content-col';
+  
+  const tocCol = document.createElement('div');
+  tocCol.className = 'article-toc-col';
+
+  // Move existing children to contentCol
+  while (container.firstChild) {
+    contentCol.appendChild(container.firstChild);
+  }
+
+  // Build TOC
+  const tocTitle = document.createElement('div');
+  tocTitle.className = 'toc-title';
+  tocTitle.textContent = 'ON THIS PAGE';
+  tocCol.appendChild(tocTitle);
+
+  const tocList = document.createElement('ul');
+  tocList.className = 'toc-list';
+
+  // Using IntersectionObserver to track active section
+  const observer = new IntersectionObserver((entries) => {
+    // Only care about headings currently intersecting
+    const visibleEntries = entries.filter(entry => entry.isIntersecting);
+    if (visibleEntries.length > 0) {
+      // Pick the first visible heading
+      const activeId = visibleEntries[0].target.id;
+      document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+      const activeLink = tocList.querySelector(`.toc-link[href="#${activeId}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+  }, { rootMargin: '0px 0px -80% 0px' });
+
+  headings.forEach((heading, index) => {
+    // Ensure the heading has an ID
+    if (!heading.id) {
+      const text = heading.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      heading.id = `heading-${index}-${text}`;
+    }
+    
+    const li = document.createElement('li');
+    li.className = `toc-item toc-${heading.tagName.toLowerCase()}`;
+    
+    const a = document.createElement('a');
+    a.href = `#${heading.id}`;
+    a.className = 'toc-link';
+    a.textContent = heading.innerText; // InnerText avoids getting HTML like <span class="bar">
+    
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Scroll offset to account for any fixed headers if needed
+      const top = heading.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
+      
+      document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+      a.classList.add('active');
+    });
+
+    li.appendChild(a);
+    tocList.appendChild(li);
+    
+    observer.observe(heading);
+  });
+
+  // Set the first link as active initially
+  if (tocList.firstChild) {
+    tocList.firstChild.querySelector('.toc-link').classList.add('active');
+  }
+
+  tocCol.appendChild(tocList);
+  wrapper.appendChild(contentCol);
+  wrapper.appendChild(tocCol);
+  container.appendChild(wrapper);
+};
 
 // Handle back button clicks in SPA
 window.addEventListener('popstate', (e) => {

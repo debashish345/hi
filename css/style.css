@@ -624,3 +624,84 @@ body {
 
 /* ─── Resource Viewer ────────────────────────────────────────────── */
 .resource-viewer { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+
+/* ─── Article Layout & TOC (Mini Tree) ─────────────────────────── */
+.article-layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.article-content-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.article-toc-col {
+  width: 240px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding-left: 24px;
+  border-left: 1px solid var(--border-medium);
+}
+
+.toc-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toc-h3 {
+  padding-left: 12px;
+}
+
+.toc-link {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--transition);
+  display: block;
+  position: relative;
+}
+
+.toc-link:hover {
+  color: var(--text-primary);
+}
+
+.toc-link.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Add custom scrollbar for TOC */
+.article-toc-col::-webkit-scrollbar {
+  width: 4px;
+}
+.article-toc-col::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 4px;
+}
+
+@media (max-width: 900px) {
+  .article-layout {
+    flex-direction: column;
+  }
+  .article-toc-col {
+    display: none;
+  }
+}

@@ -561,7 +561,7 @@
                   "github": "debashish345/hi/tree/main/data/system-design/lld/easy/parking-lot-src",
                   "description": "Design a parking lot system with classes, enums, and strategy pattern.",
                   "lastUpdated": "2025-04-25",
-                  "slug": "lld-01"
+                  "slug": "design-parking-lot"
                 },
                 {
                   "id": "lld-02",
@@ -606,7 +606,7 @@
   ],
   "meta": {
     "totalResources": 30,
-    "lastUpdated": "2025-04-27",
+    "lastUpdated": "2026-04-30",
     "version": "2.0.0",
     "author": "Interview Hub"
   }

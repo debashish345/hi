@@ -279,6 +279,8 @@ function populateResourceForm(res) {
   document.getElementById('res-type').value = res.type || 'html';
   document.getElementById('res-difficulty').value = res.difficulty || 'Beginner';
   document.getElementById('res-path').value = res.path || '';
+  document.getElementById('res-contentPath').value = res.contentPath || '';
+  document.getElementById('res-github').value = res.github || '';
   document.getElementById('res-description').value = res.description || '';
   document.getElementById('res-tags').value = (res.tags || []).join(', ');
   document.getElementById('res-lastUpdated').value = res.lastUpdated || '';
@@ -332,6 +334,8 @@ function bindAdminEvents() {
     res.type = document.getElementById('res-type').value;
     res.difficulty = document.getElementById('res-difficulty').value;
     res.path = document.getElementById('res-path').value;
+    res.contentPath = document.getElementById('res-contentPath').value;
+    res.github = document.getElementById('res-github').value;
     res.description = document.getElementById('res-description').value;
     res.tags = document.getElementById('res-tags').value.split(',').map(t => t.trim()).filter(Boolean);
     res.lastUpdated = document.getElementById('res-lastUpdated').value;
@@ -397,6 +401,8 @@ function bindAdminEvents() {
       difficulty: 'Beginner',
       tags: [],
       path: `data/${cat.id}/new-resource.html`,
+      contentPath: '',
+      github: '',
       description: '',
       lastUpdated: new Date().toISOString().split('T')[0],
     };
