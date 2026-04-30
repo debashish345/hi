@@ -314,6 +314,10 @@ body {
   margin-top: 2px;
 }
 
+.tree-children.collapsed {
+  display: none;
+}
+
 .tree-resource {
   display: flex;
   align-items: center;

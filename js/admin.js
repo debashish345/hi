@@ -36,7 +36,7 @@ function renderTree() {
       <div class="tree-item-header ${catActive ? 'active' : ''}" data-type="category" data-ci="${ci}">
         <span class="tree-toggle ${catOpen ? 'open' : ''}" data-toggle="cat-${ci}">▶</span>
         <span class="tree-icon">${cat.icon || '📁'}</span>
-        <span class="tree-label">${cat.label}</span>
+        <span class="tree-label" title="${cat.label}">${cat.label}</span>
         <span class="tree-count">${countCategoryResources(cat)}</span>
       </div>
       <div class="tree-children ${catOpen ? '' : 'collapsed'}" id="tree-cat-${ci}">`;
@@ -52,7 +52,7 @@ function renderTree() {
         html += `<div class="tree-item">
           <div class="tree-item-header ${subActive ? 'active' : ''}" data-type="subcategory" data-ci="${ci}" data-si="${si}">
             <span class="tree-toggle ${subOpen ? 'open' : ''}" data-toggle="sub-${ci}-${si}">▶</span>
-            <span class="tree-label">${sub.label}</span>
+            <span class="tree-label" title="${sub.label}">${sub.label}</span>
             <span class="tree-count">${(sub.resources || []).length}</span>
           </div>
           <div class="tree-children ${subOpen ? '' : 'collapsed'}" id="tree-sub-${ci}-${si}">`;
@@ -68,7 +68,7 @@ function renderTree() {
 
             html += `<div class="tree-resource ${resActive ? 'active' : ''}" data-type="resource" data-ci="${ci}" data-si="${si}" data-ri="${ri}">
               <span class="tree-resource-dot"></span>
-              <span class="tree-label">${res.title}</span>
+              <span class="tree-label" title="${res.title}">${res.title}</span>
             </div>`;
           });
         }
@@ -85,7 +85,7 @@ function renderTree() {
             html += `<div class="tree-item">
               <div class="tree-item-header ${nestedActive ? 'active' : ''}" data-type="nested-subcategory" data-ci="${ci}" data-si="${si}" data-ni="${ni}">
                 <span class="tree-toggle ${nestedOpen ? 'open' : ''}" data-toggle="nested-${ci}-${si}-${ni}">▶</span>
-                <span class="tree-label">${nested.label}</span>
+                <span class="tree-label" title="${nested.label}">${nested.label}</span>
                 <span class="tree-count">${(nested.resources || []).length}</span>
               </div>
               <div class="tree-children ${nestedOpen ? '' : 'collapsed'}" id="tree-nested-${ci}-${si}-${ni}">`;
@@ -100,7 +100,7 @@ function renderTree() {
 
                 html += `<div class="tree-resource ${resActive ? 'active' : ''}" data-type="nested-resource" data-ci="${ci}" data-si="${si}" data-ni="${ni}" data-ri="${ri}">
                   <span class="tree-resource-dot"></span>
-                  <span class="tree-label">${res.title}</span>
+                  <span class="tree-label" title="${res.title}">${res.title}</span>
                 </div>`;
               });
             }
