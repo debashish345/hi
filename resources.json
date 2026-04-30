@@ -414,7 +414,7 @@
                   "tags": ["LLD", "OOP", "design-patterns"],
                   "path": "lld.html?id=lld-01",
                   "contentPath": "data/system-design/lld/easy/parking-lot.json",
-                  "github": "debashish345/parking-lot-lld",
+                  "github": "debashish345/hi/tree/main/data/system-design/lld/easy/parking-lot-src",
                   "description": "Design a parking lot system with classes, enums, and strategy pattern.",
                   "lastUpdated": "2025-04-25"
                 },
