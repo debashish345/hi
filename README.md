@@ -2,7 +2,7 @@
 
 A curated, community-driven interview prep hub — hosted on GitHub Pages. Filter by topic, bookmark resources, track your reading progress, join discussions, and practice interview questions. All content is driven by a single JSON file, making contributions easy via Pull Requests.
 
-**🌐 Live Site:** `https://<your-username>.github.io/<repo-name>/`
+**🌐 Live Site:** [`https://debashish345.github.io/hi/`](https://debashish345.github.io/hi/)
 
 ---
 
