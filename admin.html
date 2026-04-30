@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,6 +15,7 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/admin.css" />
 </head>
+
 <body>
 
   <!-- ── Header ─────────────────────────────────────────────────── -->
@@ -21,7 +23,8 @@
     <div class="admin-header-inner">
       <div class="admin-logo">
         <a href="index.html" class="back-link">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
@@ -33,8 +36,17 @@
         </div>
       </div>
       <div class="admin-actions">
+        <a href="article-creator.html" class="btn btn-secondary" title="Write new article content">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Article Creator
+        </a>
         <button class="btn btn-secondary" id="btn-load-json" title="Load JSON from file">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -42,7 +54,8 @@
           Load JSON
         </button>
         <button class="btn btn-primary" id="btn-download-json" title="Download resources.json">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -50,7 +63,6 @@
           Download JSON
         </button>
       </div>
-    </div>
   </header>
 
   <!-- ── Main Layout ─────────────────────────────────────────────── -->
@@ -85,37 +97,47 @@
           </div>
         </div>
         <form id="form-category" class="editor-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label>ID</label>
-              <input type="text" id="cat-id" required />
+          <div class="form-section">
+            <h3>Identity</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>ID</label>
+                <input type="text" id="cat-id" required />
+              </div>
+              <div class="form-group">
+                <label>Label</label>
+                <input type="text" id="cat-label" required />
+              </div>
             </div>
-            <div class="form-group">
-              <label>Label</label>
-              <input type="text" id="cat-label" required />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" id="cat-fullname" />
-            </div>
-            <div class="form-group">
-              <label>Icon (emoji)</label>
-              <input type="text" id="cat-icon" />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Color (hex)</label>
-              <input type="color" id="cat-color" />
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="cat-fullname" />
+              </div>
+              <div class="form-group">
+                <label>Icon (emoji)</label>
+                <input type="text" id="cat-icon" />
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label>Description</label>
-            <textarea id="cat-description" rows="2"></textarea>
+
+          <div class="form-section">
+            <h3>Styling & Metadata</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Theme Color (hex)</label>
+                <input type="color" id="cat-color" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="cat-description" rows="2" placeholder="Brief overview of this category..."></textarea>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
+
+          <div class="form-footer">
+            <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+          </div>
         </form>
       </div>
 
@@ -129,17 +151,22 @@
           </div>
         </div>
         <form id="form-subcategory" class="editor-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label>ID</label>
-              <input type="text" id="sub-id" required />
-            </div>
-            <div class="form-group">
-              <label>Label</label>
-              <input type="text" id="sub-label" required />
+          <div class="form-section">
+            <h3>Identity</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>ID</label>
+                <input type="text" id="sub-id" required />
+              </div>
+              <div class="form-group">
+                <label>Label</label>
+                <input type="text" id="sub-label" required />
+              </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <div class="form-footer">
+            <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+          </div>
         </form>
       </div>
 
@@ -148,69 +175,87 @@
         <div class="editor-header">
           <h2 id="editor-res-title">Edit Resource</h2>
           <div class="editor-actions">
+            <a id="btn-edit-content" class="btn btn-sm btn-secondary" target="_blank"
+              title="Open in Article Creator">🖋️ Edit Content</a>
             <button class="btn btn-sm btn-danger" id="btn-delete-resource">Delete</button>
           </div>
         </div>
         <form id="form-resource" class="editor-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label>ID</label>
-              <input type="text" id="res-id" required />
+          <div class="form-section">
+            <h3>Basic Metadata</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>ID</label>
+                <input type="text" id="res-id" required />
+              </div>
+              <div class="form-group">
+                <label>Slug</label>
+                <input type="text" id="res-slug" placeholder="parking-lot-system" />
+              </div>
             </div>
             <div class="form-group">
-              <label>Slug</label>
-              <input type="text" id="res-slug" placeholder="parking-lot-system" />
+              <label>Title</label>
+              <input type="text" id="res-title" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Type</label>
+                <select id="res-type">
+                  <option value="html">HTML Article</option>
+                  <option value="md">Markdown Article</option>
+                  <option value="lld">LLD (System Design)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Difficulty</label>
+                <select id="res-difficulty">
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label>Title</label>
-            <input type="text" id="res-title" required />
-          </div>
-          <div class="form-row">
+
+          <div class="form-section">
+            <h3>Content & Paths</h3>
             <div class="form-group">
-              <label>Type</label>
-              <select id="res-type">
-                <option value="html">HTML</option>
-                <option value="md">Markdown</option>
-                <option value="lld">LLD (System Design)</option>
-              </select>
+              <label>Primary Path</label>
+              <input type="text" id="res-path" placeholder="data/java/oop-solid.html or lld.html?id=..." />
             </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Content Path (LLD)</label>
+                <input type="text" id="res-contentPath" placeholder="data/system-design/lld/..." />
+              </div>
+              <div class="form-group">
+                <label>GitHub Path (LLD)</label>
+                <input type="text" id="res-github" placeholder="debashish345/hi/tree/main/..." />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Organization & Meta</h3>
             <div class="form-group">
-              <label>Difficulty</label>
-              <select id="res-difficulty">
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-              </select>
+              <label>Description</label>
+              <textarea id="res-description" rows="2" placeholder="Brief summary for the card..."></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tags (comma-separated)</label>
+                <input type="text" id="res-tags" placeholder="OOP, SOLID, inheritance" />
+              </div>
+              <div class="form-group">
+                <label>Last Updated</label>
+                <input type="date" id="res-lastUpdated" />
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label>Path</label>
-            <input type="text" id="res-path" placeholder="data/java/oop-solid.html or lld.html?id=..." />
+
+          <div class="form-footer">
+            <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Content Path (LLD)</label>
-              <input type="text" id="res-contentPath" placeholder="data/system-design/lld/..." />
-            </div>
-            <div class="form-group">
-              <label>GitHub Path (LLD)</label>
-              <input type="text" id="res-github" placeholder="debashish345/hi/tree/main/..." />
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Description</label>
-            <textarea id="res-description" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label>Tags (comma-separated)</label>
-            <input type="text" id="res-tags" placeholder="OOP, SOLID, inheritance" />
-          </div>
-          <div class="form-group">
-            <label>Last Updated</label>
-            <input type="date" id="res-lastUpdated" />
-          </div>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
       </div>
     </main>
@@ -235,4 +280,5 @@
   <!-- Admin JS -->
   <script src="js/admin.js"></script>
 </body>
+
 </html>

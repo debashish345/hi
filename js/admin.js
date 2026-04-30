@@ -118,73 +118,50 @@ function renderTree() {
 
   container.innerHTML = html;
 
-  // Bind tree click events
-  container.querySelectorAll('.tree-toggle').forEach(toggle => {
-    toggle.addEventListener('click', (e) => {
+  // Bind tree click events (Event Delegation)
+  container.onclick = (e) => {
+    const toggle = e.target.closest('.tree-toggle');
+    if (toggle) {
       e.stopPropagation();
       const key = toggle.dataset.toggle;
-      adminState.treeOpenState[key] = adminState.treeOpenState[key] === false ? true : false;
+      adminState.treeOpenState[key] = adminState.treeOpenState[key] === false;
       renderTree();
-    });
-  });
+      return;
+    }
 
-  container.querySelectorAll('[data-type="category"]').forEach(el => {
-    el.addEventListener('click', () => {
+    const el = e.target.closest('[data-type]');
+    if (!el) return;
+
+    const type = el.dataset.type;
+    const ci = el.dataset.ci !== undefined ? parseInt(el.dataset.ci) : undefined;
+    const si = el.dataset.si !== undefined ? parseInt(el.dataset.si) : undefined;
+    const ni = el.dataset.ni !== undefined ? parseInt(el.dataset.ni) : undefined;
+    const ri = el.dataset.ri !== undefined ? parseInt(el.dataset.ri) : undefined;
+
+    if (type === 'category') {
       adminState.selectedType = 'category';
-      adminState.selectedPath = { catIndex: parseInt(el.dataset.ci) };
-      renderTree();
+      adminState.selectedPath = { catIndex: ci };
       showCategoryEditor();
-    });
-  });
-
-  container.querySelectorAll('[data-type="subcategory"]').forEach(el => {
-    el.addEventListener('click', () => {
+    } else if (type === 'subcategory') {
       adminState.selectedType = 'subcategory';
-      adminState.selectedPath = { catIndex: parseInt(el.dataset.ci), subIndex: parseInt(el.dataset.si) };
-      renderTree();
+      adminState.selectedPath = { catIndex: ci, subIndex: si };
       showSubcategoryEditor();
-    });
-  });
-
-  container.querySelectorAll('[data-type="nested-subcategory"]').forEach(el => {
-    el.addEventListener('click', () => {
+    } else if (type === 'nested-subcategory') {
       adminState.selectedType = 'subcategory';
-      adminState.selectedPath = {
-        catIndex: parseInt(el.dataset.ci),
-        subIndex: parseInt(el.dataset.si),
-        nestedIndex: parseInt(el.dataset.ni),
-      };
-      renderTree();
+      adminState.selectedPath = { catIndex: ci, subIndex: si, nestedIndex: ni };
       showNestedSubcategoryEditor();
-    });
-  });
-
-  container.querySelectorAll('[data-type="resource"]').forEach(el => {
-    el.addEventListener('click', () => {
+    } else if (type === 'resource') {
       adminState.selectedType = 'resource';
-      adminState.selectedPath = {
-        catIndex: parseInt(el.dataset.ci),
-        subIndex: parseInt(el.dataset.si),
-        resIndex: parseInt(el.dataset.ri),
-      };
-      renderTree();
+      adminState.selectedPath = { catIndex: ci, subIndex: si, resIndex: ri };
       showResourceEditor();
-    });
-  });
-
-  container.querySelectorAll('[data-type="nested-resource"]').forEach(el => {
-    el.addEventListener('click', () => {
+    } else if (type === 'nested-resource') {
       adminState.selectedType = 'resource';
-      adminState.selectedPath = {
-        catIndex: parseInt(el.dataset.ci),
-        subIndex: parseInt(el.dataset.si),
-        nestedIndex: parseInt(el.dataset.ni),
-        resIndex: parseInt(el.dataset.ri),
-      };
-      renderTree();
+      adminState.selectedPath = { catIndex: ci, subIndex: si, nestedIndex: ni, resIndex: ri };
       showNestedResourceEditor();
-    });
-  });
+    }
+    
+    renderTree(); // Update active highlights
+  };
 }
 
 // ─── Count Resources ────────────────────────────────────────────────────
@@ -255,17 +232,25 @@ function showNestedSubcategoryEditor() {
 
 // ─── Show Resource Editor ───────────────────────────────────────────────
 function showResourceEditor() {
-  hideAllEditors();
   const { catIndex, subIndex, resIndex } = adminState.selectedPath;
-  const res = adminState.data.categories[catIndex].subcategories[subIndex].resources[resIndex];
-  populateResourceForm(res);
+  const cat = adminState.data.categories[catIndex];
+  if (!cat || !cat.subcategories[subIndex]) return;
+  const res = cat.subcategories[subIndex].resources[resIndex];
+  if (res) {
+    hideAllEditors();
+    populateResourceForm(res);
+  }
 }
 
 function showNestedResourceEditor() {
-  hideAllEditors();
   const { catIndex, subIndex, nestedIndex, resIndex } = adminState.selectedPath;
-  const res = adminState.data.categories[catIndex].subcategories[subIndex].subcategories[nestedIndex].resources[resIndex];
-  populateResourceForm(res);
+  const cat = adminState.data.categories[catIndex];
+  if (!cat || !cat.subcategories[subIndex]?.subcategories[nestedIndex]) return;
+  const res = cat.subcategories[subIndex].subcategories[nestedIndex].resources[resIndex];
+  if (res) {
+    hideAllEditors();
+    populateResourceForm(res);
+  }
 }
 
 function populateResourceForm(res) {
@@ -284,6 +269,23 @@ function populateResourceForm(res) {
   document.getElementById('res-description').value = res.description || '';
   document.getElementById('res-tags').value = (res.tags || []).join(', ');
   document.getElementById('res-lastUpdated').value = res.lastUpdated || '';
+
+  // Update Edit Content link
+  const editBtn = document.getElementById('btn-edit-content');
+  if (res.type === 'lld') {
+    editBtn.style.display = 'none'; // LLD uses a different JSON structure
+  } else {
+    editBtn.style.display = 'flex';
+    const params = new URLSearchParams({
+      title: res.title || '',
+      slug: res.slug || '',
+      type: res.type || 'html',
+      difficulty: res.difficulty || '',
+      tags: (res.tags || []).join(','),
+      desc: res.description || ''
+    });
+    editBtn.href = `article-creator.html?${params.toString()}`;
+  }
 }
 
 // ─── Bind Events ────────────────────────────────────────────────────────
