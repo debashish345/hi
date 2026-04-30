@@ -1,30 +1,7 @@
 /* ─── LLD Viewer Styles ──────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-:root {
-  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --bg-body: #0f1117;
-  --bg-surface: #161822;
-  --bg-card: #1c1e2e;
-  --bg-elevated: #252840;
-  --border-subtle: rgba(255,255,255,0.06);
-  --border-medium: rgba(255,255,255,0.1);
-  --text-primary: #e8eaed;
-  --text-secondary: #9aa0b2;
-  --text-muted: #5c6378;
-  --accent: #818cf8;
-  --accent-glow: rgba(129,140,248,0.15);
-  --green: #34d399;
-  --blue: #60a5fa;
-  --purple: #a78bfa;
-  --amber: #fbbf24;
-  --red: #f87171;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --transition: 0.2s ease;
-}
+/* CSS variables handled by style.css */
 
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-family: var(--font-main); -webkit-font-smoothing: antialiased; }
@@ -56,7 +33,7 @@ body { background: var(--bg-body); color: var(--text-primary); font-size: 14px; 
   color: var(--text-secondary); text-decoration: none; font-size: 13px; font-weight: 500;
   transition: all var(--transition);
 }
-.btn-back:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.btn-back:hover { background: var(--bg-hover); color: var(--text-primary); }
 
 /* ─── Page Layout ──────────────────────────────────────────────── */
 .lld-page { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
@@ -97,13 +74,13 @@ body { background: var(--bg-body); color: var(--text-primary); font-size: 14px; 
 .heading-bar { display: inline-block; width: 4px; height: 22px; background: var(--accent); border-radius: 4px; }
 .section-desc { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
 .section-desc kbd {
-  background: var(--bg-elevated); padding: 2px 6px; border-radius: 4px;
+  background: var(--bg-hover); padding: 2px 6px; border-radius: 4px;
   font-family: var(--font-mono); font-size: 11px; border: 1px solid var(--border-medium);
 }
 
 /* ─── Mermaid Diagram ──────────────────────────────────────────── */
 .mermaid-container {
-  background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
+  background: var(--bg-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
   padding: 24px; overflow-x: auto; min-height: 200px;
 }
 .mermaid-container svg { max-width: 100%; height: auto; }
@@ -111,7 +88,7 @@ body { background: var(--bg-body); color: var(--text-primary); font-size: 14px; 
 /* ─── Editor Split Pane ────────────────────────────────────────── */
 .editor-split {
   display: flex; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
-  overflow: hidden; background: var(--bg-surface); min-height: 560px;
+  overflow: hidden; background: var(--bg-white); min-height: 560px;
 }
 
 /* File Tree Panel */
@@ -123,7 +100,7 @@ body { background: var(--bg-body); color: var(--text-primary); font-size: 14px; 
 .file-tree-header {
   display: flex; align-items: center; gap: 8px;
   padding: 10px 14px; font-size: 12px; font-weight: 600; color: var(--text-secondary);
-  border-bottom: 1px solid var(--border-subtle); background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle); background: var(--bg-hover);
   text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0;
 }
 .file-tree { flex: 1; overflow-y: auto; padding: 6px 0; }
@@ -192,7 +169,7 @@ body { background: var(--bg-body); color: var(--text-primary); font-size: 14px; 
 .walkthrough-list { display: flex; flex-direction: column; gap: 12px; }
 .wt-item {
   display: flex; gap: 16px; align-items: flex-start;
-  background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  background: var(--bg-white); border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md); padding: 18px 20px; transition: border-color var(--transition);
 }
 .wt-item:hover { border-color: var(--border-medium); }
@@ -204,12 +181,12 @@ body { background: var(--bg-body); color: var(--text-primary); font-size: 14px; 
 }
 .wt-item h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
 .wt-item p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-.wt-item code { font-family: var(--font-mono); font-size: 12px; background: var(--bg-elevated); padding: 1px 5px; border-radius: 3px; color: var(--accent); }
+.wt-item code { font-family: var(--font-mono); font-size: 12px; background: var(--bg-hover); padding: 1px 5px; border-radius: 3px; color: var(--accent); }
 
 /* ─── Follow-up Questions ──────────────────────────────────────── */
 .followup-list { display: flex; flex-direction: column; gap: 8px; }
 .fq-item {
-  background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  background: var(--bg-white); border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md); overflow: hidden; transition: border-color var(--transition);
 }
 .fq-item:hover { border-color: var(--border-medium); }
@@ -228,7 +205,7 @@ body { background: var(--bg-body); color: var(--text-primary); font-size: 14px; 
   padding: 0 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.7;
 }
 .fq-item.open .fq-answer { max-height: 500px; padding: 0 18px 16px; }
-.fq-answer code { font-family: var(--font-mono); font-size: 12px; background: var(--bg-elevated); padding: 1px 5px; border-radius: 3px; color: var(--accent); }
+.fq-answer code { font-family: var(--font-mono); font-size: 12px; background: var(--bg-hover); padding: 1px 5px; border-radius: 3px; color: var(--accent); }
 
 /* ─── Responsive ───────────────────────────────────────────────── */
 @media (max-width: 768px) {

@@ -27,11 +27,70 @@ async function fetchData() {
 
 // ─── Init ───────────────────────────────────────────────────────────────
 function init() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const resourceSlug = urlParams.get('article') || urlParams.get('resource') || urlParams.get('slug');
+
+  if (resourceSlug) {
+    const resource = findResourceBySlug(resourceSlug);
+    if (resource) {
+      renderResourceView(resource);
+      return;
+    }
+  }
+
+  // Normal view
+  document.getElementById('category-tabs').classList.remove('hidden');
+  document.getElementById('main-content').classList.remove('hidden');
+  document.getElementById('resource-viewer').classList.add('hidden');
   renderCategoryTabs();
   renderContent();
   bindSearch();
   bindHeaderTabs();
   bindClearFilters();
+  bindThemeToggle();
+}
+
+// ─── Find Resource by Slug ──────────────────────────────────────────────
+function findResourceBySlug(slug) {
+  if (!state.data || !state.data.categories) return null;
+  const flat = flattenResources(state.data.categories, {});
+  return flat.find(r => r.slug === slug || r.id === slug);
+}
+
+// ─── Theme Toggle ───────────────────────────────────────────────────────
+function bindThemeToggle() {
+  const toggleBtn = document.getElementById('theme-toggle');
+  if (!toggleBtn) return;
+  
+  const iconSun = toggleBtn.querySelector('.icon-sun');
+  const iconMoon = toggleBtn.querySelector('.icon-moon');
+  
+  // Check local storage or system preference
+  const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    iconSun.style.display = 'block';
+    iconMoon.style.display = 'none';
+  }
+  
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+      iconSun.style.display = 'none';
+      iconMoon.style.display = 'block';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      iconSun.style.display = 'block';
+      iconMoon.style.display = 'none';
+    }
+    
+    // Dispatch event so Monaco editor can update its theme if it's open
+    window.dispatchEvent(new Event('themeChanged'));
+  });
 }
 
 // ─── Category Tabs ──────────────────────────────────────────────────────
@@ -207,7 +266,7 @@ function renderCard(r) {
   ).join('');
 
   return `
-    <div class="resource-card" onclick="openResource('${r.path}', '${r.type}', '${r.title}', '${r.id}')">
+    <div class="resource-card" onclick="openResource('${r.path}', '${r.type}', '${r.title}', '${r.id}', '${r.slug || r.id}')">
       <div class="card-top">
         <span class="card-title">${r.title}</span>
         <button class="card-check ${isChecked ? 'checked' : ''}" onclick="event.stopPropagation(); toggleComplete('${r.id}', this)" title="Mark as completed">
@@ -244,14 +303,70 @@ function toggleFavourite(sectionId) {
   renderContent();
 }
 
-// ─── Open Resource ──────────────────────────────────────────────────────
-function openResource(path, type, title, id) {
-  if (type === 'lld') {
-    window.open(`lld.html#${id}`, '_blank');
+// ─── Resource Opening ───────────────────────────────────────────────────
+function openResource(path, type, title, id, slug) {
+  const urlSlug = slug || id;
+  const url = `?article=${urlSlug}`;
+  window.history.pushState({ slug: urlSlug }, '', url);
+  
+  const resource = findResourceBySlug(urlSlug) || { path, type, title, id, slug: urlSlug };
+  renderResourceView(resource);
+}
+
+// ─── Render Resource View ───────────────────────────────────────────────
+async function renderResourceView(resource) {
+  document.getElementById('category-tabs').classList.add('hidden');
+  document.getElementById('main-content').classList.add('hidden');
+  const viewer = document.getElementById('resource-viewer');
+  viewer.classList.remove('hidden');
+  
+  const frame = document.getElementById('resource-content-frame');
+  frame.innerHTML = ''; // clear
+
+  if (resource.type === 'lld') {
+    // Inject LLD Template
+    const template = document.getElementById('lld-template');
+    frame.appendChild(template.content.cloneNode(true));
+    // Trigger lld-viewer init logic but dynamically
+    if (window.initLLDViewer) {
+      window.initLLDViewer(resource.id);
+    }
   } else {
-    window.open(path, '_blank');
+    // For HTML, fetch the content
+    try {
+      frame.innerHTML = `<div class="loader-spinner" style="margin:40px auto; display:block;"></div>`;
+      const res = await fetch(resource.path);
+      const htmlText = await res.text();
+      // Extract everything inside .container or body
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const content = doc.querySelector('.container') || doc.body;
+      // Remove any inner back links
+      const backLinks = content.querySelectorAll('.back');
+      backLinks.forEach(b => b.remove());
+      
+      frame.innerHTML = '';
+      frame.appendChild(content);
+    } catch (e) {
+      frame.innerHTML = `<div class="error-screen"><p>Failed to load content.</p></div>`;
+    }
   }
 }
+
+// Handle back button clicks in SPA
+window.addEventListener('popstate', (e) => {
+  init();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const closeBtn = document.getElementById('close-viewer-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      window.history.pushState({}, '', window.location.pathname);
+      init();
+    });
+  }
+});
 
 // ─── Search ─────────────────────────────────────────────────────────────
 function bindSearch() {

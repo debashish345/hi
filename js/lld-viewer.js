@@ -9,12 +9,17 @@ const GITHUB_CACHE_KEY = 'lld-github-cache';
 const CACHE_TTL = 30 * 60 * 1000; // 30 min
 
 // ─── Entry Point ────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', initLLDViewer);
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('lld-page') && window.location.pathname.includes('lld.html')) {
+    initLLDViewer();
+  }
+});
 
-async function initLLDViewer() {
-  // Support both ?id=lld-01 and #lld-01 (fallback for servers that strip query params)
-  let id = new URLSearchParams(window.location.search).get('id');
-  if (!id && window.location.hash) id = window.location.hash.replace('#', '');
+window.initLLDViewer = async function(resourceId) {
+  const id = resourceId || new URLSearchParams(window.location.search).get('id') || window.location.hash.replace('#', '');
+  
+  // Only setup LLD viewer if we actually have the container
+  if (!document.getElementById('lld-page')) return;
   if (!id) return showError('No problem ID provided. Use ?id=lld-01');
 
   try {
@@ -218,10 +223,11 @@ function renderMermaid(mermaidCode) {
   }
 
   if (!mermaidInitialized) {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'dark',
-      themeVariables: {
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: isDark ? {
         darkMode: true,
         background: '#161822',
         primaryColor: '#2e3357',
@@ -230,6 +236,10 @@ function renderMermaid(mermaidCode) {
         lineColor: '#818cf8',
         secondaryColor: '#252840',
         tertiaryColor: '#1c1e2e',
+        fontFamily: 'Inter, sans-serif',
+        fontSize: '13px',
+      } : {
+        darkMode: false,
         fontFamily: 'Inter, sans-serif',
         fontSize: '13px',
       },
@@ -451,35 +461,66 @@ function initMonaco(initialCode) {
   });
 
   require(['vs/editor/editor.main'], function () {
-    monaco.editor.defineTheme('lld-dark', {
-      base: 'vs-dark', inherit: true,
-      rules: [
-        { token: 'comment', foreground: '5c6378', fontStyle: 'italic' },
-        { token: 'keyword', foreground: 'c084fc' },
-        { token: 'string', foreground: '86efac' },
-        { token: 'number', foreground: 'fbbf24' },
-        { token: 'type', foreground: '60a5fa' },
-        { token: 'annotation', foreground: 'fb923c' },
-      ],
-      colors: {
-        'editor.background': '#12141f',
-        'editor.foreground': '#e8eaed',
-        'editor.lineHighlightBackground': '#1a1d2e',
-        'editor.selectionBackground': '#2e3357',
-        'editorCursor.foreground': '#818cf8',
-        'editorLineNumber.foreground': '#3a3d55',
-        'editorLineNumber.activeForeground': '#818cf8',
-        'editorIndentGuide.background': '#1e2133',
-        'editorGutter.background': '#12141f',
-        'minimap.background': '#12141f',
-        'scrollbarSlider.background': '#2a2d4050',
-      }
-    });
+    const defineThemes = () => {
+      monaco.editor.defineTheme('lld-dark', {
+        base: 'vs-dark', inherit: true,
+        rules: [
+          { token: 'comment', foreground: '5c6378', fontStyle: 'italic' },
+          { token: 'keyword', foreground: 'c084fc' },
+          { token: 'string', foreground: '86efac' },
+          { token: 'number', foreground: 'fbbf24' },
+          { token: 'type', foreground: '60a5fa' },
+          { token: 'annotation', foreground: 'fb923c' },
+        ],
+        colors: {
+          'editor.background': '#12141f',
+          'editor.foreground': '#e8eaed',
+          'editor.lineHighlightBackground': '#1a1d2e',
+          'editor.selectionBackground': '#2e3357',
+          'editorCursor.foreground': '#818cf8',
+          'editorLineNumber.foreground': '#3a3d55',
+          'editorLineNumber.activeForeground': '#818cf8',
+          'editorIndentGuide.background': '#1e2133',
+          'editorGutter.background': '#12141f',
+          'minimap.background': '#12141f',
+          'scrollbarSlider.background': '#2a2d4050',
+        }
+      });
+      monaco.editor.defineTheme('lld-light', {
+        base: 'vs', inherit: true,
+        rules: [
+          { token: 'comment', foreground: '64748b', fontStyle: 'italic' },
+          { token: 'keyword', foreground: '6366f1' },
+          { token: 'string', foreground: '10b981' },
+          { token: 'number', foreground: 'f59e0b' },
+          { token: 'type', foreground: '3b82f6' },
+          { token: 'annotation', foreground: 'f97316' },
+        ],
+        colors: {
+          'editor.background': '#ffffff',
+          'editor.foreground': '#1e293b',
+          'editor.lineHighlightBackground': '#f8fafc',
+          'editor.selectionBackground': '#e2e8f0',
+          'editorCursor.foreground': '#6366f1',
+          'editorLineNumber.foreground': '#94a3b8',
+          'editorLineNumber.activeForeground': '#6366f1',
+          'editorIndentGuide.background': '#f1f5f9',
+          'editorGutter.background': '#ffffff',
+          'minimap.background': '#ffffff',
+          'scrollbarSlider.background': '#cbd5e150',
+        }
+      });
+    };
+    
+    defineThemes();
+    
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const initialTheme = isDark ? 'lld-dark' : 'lld-light';
 
     monacoEditor = monaco.editor.create(document.getElementById('monaco-editor'), {
       value: initialCode || '',
       language: 'java',
-      theme: 'lld-dark',
+      theme: initialTheme,
       readOnly: true,
       fontSize: 13,
       fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
@@ -497,6 +538,11 @@ function initMonaco(initialCode) {
       glyphMargin: false,
       automaticLayout: true,
       scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8, useShadows: false },
+    });
+
+    window.addEventListener('themeChanged', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      monaco.editor.setTheme(isDark ? 'lld-dark' : 'lld-light');
     });
 
     monacoEditor.onDidChangeCursorPosition(e => {

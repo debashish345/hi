@@ -274,6 +274,7 @@ function populateResourceForm(res) {
 
   document.getElementById('editor-res-title').textContent = `Edit: ${res.title}`;
   document.getElementById('res-id').value = res.id || '';
+  document.getElementById('res-slug').value = res.slug || '';
   document.getElementById('res-title').value = res.title || '';
   document.getElementById('res-type').value = res.type || 'html';
   document.getElementById('res-difficulty').value = res.difficulty || 'Beginner';
@@ -326,6 +327,7 @@ function bindAdminEvents() {
       res = adminState.data.categories[catIndex].subcategories[subIndex].resources[resIndex];
     }
     res.id = document.getElementById('res-id').value;
+    res.slug = document.getElementById('res-slug').value;
     res.title = document.getElementById('res-title').value;
     res.type = document.getElementById('res-type').value;
     res.difficulty = document.getElementById('res-difficulty').value;
@@ -389,6 +391,7 @@ function bindAdminEvents() {
     const cat = adminState.data.categories[catIndex];
     const newRes = {
       id: `res-${Date.now()}`,
+      slug: `new-resource-${Date.now()}`,
       title: 'New Resource',
       type: 'html',
       difficulty: 'Beginner',
