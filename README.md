@@ -2,7 +2,9 @@
 
 A curated, community-driven interview prep hub — hosted on GitHub Pages. Filter by topic, bookmark resources, track your reading progress, join discussions, and practice interview questions. All content is driven by a single JSON file, making contributions easy via Pull Requests.
 
-**🌐 Live Site:** [`https://debashish345.github.io/hi/`](https://debashish345.github.io/hi/)
+**🌐 Live Sites:**
+- [`https://debashish345.github.io/hi/`](https://debashish345.github.io/hi/) (GitHub Pages)
+- [`https://hi.blackshirt.in`](https://hi.blackshirt.in) (AWS S3)
 
 ---
 
@@ -38,7 +40,8 @@ interview-resources/
 │
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          # GitHub Actions → auto-deploys to Pages on push
+│       ├── deploy.yml          # Auto-deploy to GitHub Pages
+│       └── s3-deploy.yml       # Auto-deploy to AWS S3
 │
 └── README.md                   # This file
 ```
@@ -236,6 +239,28 @@ npx serve .
 Then open `http://localhost:8080` in your browser.
 
 > ⚠️ **Must use a local server** — `fetch('data/resources.json')` won't work with `file://` protocol.
+
+---
+
+---
+
+## 🚀 Hosting on AWS S3
+
+### Step 1 — AWS Setup
+
+1. Create an S3 bucket named `hi.blackshirt.in`.
+2. Configure the bucket for **Static Website Hosting**.
+3. Create an IAM Role for GitHub Actions (OIDC) with `S3FullAccess` to the bucket.
+4. Note the **Role ARN**.
+
+### Step 2 — GitHub Configuration
+
+1. Go to your repo on GitHub → **Settings** → **Secrets and variables** → **Actions**.
+2. Add a new secret named `AWS_ROLE_ARN` and paste your IAM Role ARN.
+
+### Step 3 — Deploy
+
+Push any change to `main` — the workflow in `.github/workflows/s3-deploy.yml` will sync the site to S3 automatically.
 
 ---
 

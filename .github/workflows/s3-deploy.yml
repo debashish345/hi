@@ -1,0 +1,30 @@
+name: Deploy to AWS S3
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          role-session-name: GitHubActionsS3Deploy
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync . s3://hi.blackshirt.in --delete --exclude ".git/*" --exclude ".github/*"
